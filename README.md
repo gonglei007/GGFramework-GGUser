@@ -13,6 +13,40 @@
 
 GGUser 是一个面向游戏客户端的**用户系统与 SDK 接入管理框架**，用于统一对接各个渠道的账号登录、支付、数据上报等能力。它通过抽象 SDK 接口 + 工厂 + 事件回调，将具体渠道实现与游戏业务解耦，支持方便地切换和接入多个渠道 SDK。
 
+### 架构示意
+
+```mermaid
+flowchart TB
+    subgraph 游戏业务层
+        Business[游戏逻辑 / UI]
+    end
+    subgraph GGUser 门面层
+        UM[UserManager<br/>Init / Login / Pay / SubmitData]
+        US[UserSystem<br/>状态机 + 事件广播]
+    end
+    subgraph SDK 抽象层
+        ISDK[ISDK 接口<br/>策略模式]
+        Factory[SDKFactory]
+    end
+    subgraph 渠道实现
+        QK[QuickSDK]
+        ZS[智尚 SDK]
+        NA[NativeSDK]
+        IN[InternalSDK]
+    end
+    subgraph 原生平台
+        Bridge[NativeLuaBridge<br/>Android / iOS 桥接]
+    end
+
+    Business --> UM --> US
+    US --> ISDK
+    ISDK --> QK & ZS & NA & IN
+    Factory --> QK & ZS & NA & IN
+    QK & NA & IN --> Bridge
+```
+
+> **依赖倒置**：`UIAdaptor` / `LogAdaptor` 通过委托将界面、上报能力交给宿主注入，GGUser 本身不绑定任何具体 UI / 网络框架。
+
 ## 功能与特性
 
 **用户与 SDK 管理**
@@ -85,7 +119,8 @@ GGUser 是一个面向游戏客户端的**用户系统与 SDK 接入管理框架
 
 ## 文档
 
-* 使用文档(TODO)
+* [如何快速接入?](/documents/quickstart.md)
+* [技术手册](/documents/manual.md)
 
 ## 进群沟通
 
