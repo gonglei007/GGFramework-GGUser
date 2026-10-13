@@ -15,35 +15,10 @@ GGUser 是一个面向游戏客户端的**用户系统与 SDK 接入管理框架
 
 ### 架构示意
 
-```mermaid
-flowchart TB
-    subgraph 游戏业务层
-        Business[游戏逻辑 / UI]
-    end
-    subgraph GGUser 门面层
-        UM[UserManager<br/>Init / Login / Pay / SubmitData]
-        US[UserSystem<br/>状态机 + 事件广播]
-    end
-    subgraph SDK 抽象层
-        ISDK[ISDK 接口<br/>策略模式]
-        Factory[SDKFactory]
-    end
-    subgraph 渠道实现
-        QK[QuickSDK]
-        ZS[智尚 SDK]
-        NA[NativeSDK]
-        IN[InternalSDK]
-    end
-    subgraph 原生平台
-        Bridge[NativeLuaBridge<br/>Android / iOS 桥接]
-    end
+![GGUser 架构分层](documents/diagrams/architecture.svg)
 
-    Business --> UM --> US
-    US --> ISDK
-    ISDK --> QK & ZS & NA & IN
-    Factory --> QK & ZS & NA & IN
-    QK & NA & IN --> Bridge
-```
+> 图表以 **draw.io** 维护，源文件见 [`documents/diagrams/architecture.drawio`](documents/diagrams/architecture.drawio)。
+> 登录 / 支付时序图与状态机图见 **[技术设计文档](documents/technical-design.md)**。
 
 > **依赖倒置**：`UIAdaptor` / `LogAdaptor` 通过委托将界面、上报能力交给宿主注入，GGUser 本身不绑定任何具体 UI / 网络框架。
 
@@ -56,8 +31,8 @@ flowchart TB
 
 **多渠道 SDK 接入（策略模式）**
 
-- `ISDK` 抽象接口 + `SDKFactory` 工厂，按 `SDKTarget` 创建对应渠道实现
-- 预置实现：**QuickSDK**、**智尚 SDK**、**NativeSDK**（默认）、**InternalSDK**
+- `ISDK` 抽象接口 + `SDKFactory` 工厂，按 `SDKTarget` 创建对应渠道实现（当前工厂可直接创建 **NativeSDK**（默认）与 **智尚 SDK**）
+- 其余实现：**QuickSDK** 需启用 `QUICK_SDK` 宏并在工厂对应分支放开；**InternalSDK** 未纳入 `SDKTarget` 枚举，需手动实例化
 - 编辑器内通过 `SIMULATION_MODE_SDK` 宏启用模拟 SDK，无需真机能跑通登录 / 支付流程
 
 **与原生平台桥接**
@@ -65,7 +40,7 @@ flowchart TB
 - `NativeLuaBridge`：Unity（含 Lua）与 Android / iOS 原生代码的双向桥接
   - Android：`AndroidJavaClass` 静态调用原生 SDK 方法
   - iOS：`[DllImport("__Internal")]` 声明原生 C 接口
-- 平台接口：设备 ID / UID 获取封装
+- 平台接口：设备 UID 获取封装（`GetDeviceUID`，iOS 分支为 TODO）；`GetDeviceID` 目前为预留空实现
 
 **可插拔解耦**
 
@@ -75,7 +50,7 @@ flowchart TB
 
 **数据模型**
 
-- `UserData` / `Order` / `User` 等数据模型自带 JSON 序列化，便于打包上报与回调解析
+- `Order` / `UserData` 数据模型自带 JSON 序列化（`GetJsonString`），便于打包上报与回调解析
 
 ## 工程内容
 
@@ -121,6 +96,16 @@ flowchart TB
 
 * [如何快速接入?](/documents/quickstart.md)
 * [技术手册](/documents/manual.md)
+* [技术设计文档](/documents/technical-design.md)（架构 / 登录 / 支付 / 状态机图）
+
+### 架构图表（draw.io）
+
+| 图表 | 预览（SVG） | 可编辑源（drawio） |
+| ---- | ---- | ---- |
+| 架构分层 | [architecture.svg](/documents/diagrams/architecture.svg) | [architecture.drawio](/documents/diagrams/architecture.drawio) |
+| 登录时序 | [login-sequence.svg](/documents/diagrams/login-sequence.svg) | [login-sequence.drawio](/documents/diagrams/login-sequence.drawio) |
+| 支付时序 | [pay-sequence.svg](/documents/diagrams/pay-sequence.svg) | [pay-sequence.drawio](/documents/diagrams/pay-sequence.drawio) |
+| 状态机 | [state-machine.svg](/documents/diagrams/state-machine.svg) | [state-machine.drawio](/documents/diagrams/state-machine.drawio) |
 
 ## 进群沟通
 
@@ -130,7 +115,7 @@ flowchart TB
 
 ## TODO-List
 
-* 完善 Login 环节的「游戏服认证 / 登录」对接（当前为预留位，可与 GGNetwork 组合）
+* 完善 Login 环节的「游戏服认证 / 登录」对接（当前为预留位，可与 GGNetwork 组合）。未接入游戏服时，`Login` 会直接推进到已登录并触发回调，此时回调参数 `loginResponse` 为 `null`
 * 更完整的 Demo 演示 与 一键对接说明
 
 ## 更多资料

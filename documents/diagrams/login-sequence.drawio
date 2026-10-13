@@ -1,0 +1,95 @@
+<mxfile host="app.diagrams.net" agent="GGUser" version="21.0.0">
+  <diagram id="gguser-login" name="登录时序">
+    <mxGraphModel dx="1000" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="980" pageHeight="780" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="p_game" value="游戏业务" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="40" width="140" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="p_um" value="UserManager" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="40" width="140" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="p_us" value="UserSystem" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="40" width="140" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="p_sdk" value="SDK (ISDK)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="540" y="40" width="140" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="p_native" value="原生平台" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="700" y="40" width="140" height="36" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ll_game" style="html=1;endArrow=none;dashed=1;strokeColor=#999999;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="90" y="76" as="sourcePoint" /><mxPoint x="90" y="700" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="ll_um" style="html=1;endArrow=none;dashed=1;strokeColor=#999999;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="250" y="76" as="sourcePoint" /><mxPoint x="250" y="700" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="ll_us" style="html=1;endArrow=none;dashed=1;strokeColor=#999999;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="430" y="76" as="sourcePoint" /><mxPoint x="430" y="700" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="ll_sdk" style="html=1;endArrow=none;dashed=1;strokeColor=#999999;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="610" y="76" as="sourcePoint" /><mxPoint x="610" y="700" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="ll_native" style="html=1;endArrow=none;dashed=1;strokeColor=#999999;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="770" y="76" as="sourcePoint" /><mxPoint x="770" y="700" as="targetPoint" /></mxGeometry>
+        </mxCell>
+
+        <mxCell id="m1" value="1: Login(serverID, callback)" style="html=1;endArrow=block;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="90" y="110" as="sourcePoint" /><mxPoint x="250" y="110" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="m2" value="2: HasLogined()? → Login()" style="html=1;endArrow=block;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="250" y="145" as="sourcePoint" /><mxPoint x="430" y="145" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="n1" value="SDKIniting_Enter → SDKInit()" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="335" y="162" width="190" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="m4" value="3: sdk.Init()" style="html=1;endArrow=block;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="430" y="215" as="sourcePoint" /><mxPoint x="610" y="215" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="m5" value="4: UnityCallNative(&quot;Init&quot;)" style="html=1;endArrow=block;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="610" y="250" as="sourcePoint" /><mxPoint x="770" y="250" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="m6" value="5: InitSuccess" style="html=1;endArrow=open;dashed=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="770" y="285" as="sourcePoint" /><mxPoint x="610" y="285" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="m7" value="6: CallSDKInitSuccess(ret)" style="html=1;endArrow=block;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="610" y="320" as="sourcePoint" /><mxPoint x="430" y="320" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="n2" value="→ SDKLogining；广播 SDKInitSuccess" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="325" y="337" width="210" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="m9" value="7: sdk.Login()" style="html=1;endArrow=block;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="430" y="392" as="sourcePoint" /><mxPoint x="610" y="392" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="m10" value="8: UnityCallNative(&quot;Login&quot;)" style="html=1;endArrow=block;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="610" y="427" as="sourcePoint" /><mxPoint x="770" y="427" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="m11" value="9: LoginSuccess(user json)" style="html=1;endArrow=open;dashed=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="770" y="462" as="sourcePoint" /><mxPoint x="610" y="462" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="m12" value="10: CallSDKLoginSuccess(user)" style="html=1;endArrow=block;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="610" y="497" as="sourcePoint" /><mxPoint x="430" y="497" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="n3" value="保存 UserInfo → SDKLogined；广播 SDKLoginSuccess" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="310" y="514" width="240" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="m14" value="11: onEvent(SDKLoginSuccess, uid)" style="html=1;endArrow=open;dashed=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="430" y="580" as="sourcePoint" /><mxPoint x="250" y="580" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="n4" value="Init → Authing → Logining → Logined" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="150" y="597" width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="m16" value="12: callback(loginResponse)" style="html=1;endArrow=open;dashed=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="250" y="660" as="sourcePoint" /><mxPoint x="90" y="660" as="targetPoint" /></mxGeometry>
+        </mxCell>
+
+        <mxCell id="legend" value="编辑器 SIMULATION_MODE_SDK：SDK 直接回调 HandleSDKCallback(&quot;InitSuccess&quot;/&quot;LoginSuccess&quot;)，不经原生平台。&#10;未接入游戏服时，步骤 11 后 UserManager 直接推进到 Logined，loginResponse 为 null。" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="20" y="712" width="820" height="48" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

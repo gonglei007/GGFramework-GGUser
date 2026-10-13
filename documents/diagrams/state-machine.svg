@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="480" viewBox="0 0 820 480" font-family="Helvetica,Arial,sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#333333"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="820" height="480" fill="#ffffff"/>
+
+  <text x="40" y="30" font-size="14" font-weight="bold" fill="#222">UserSystem 状态机（States）</text>
+
+  <!-- self loops -->
+  <g stroke="#333333" stroke-width="1.5" fill="none">
+    <path d="M250,115 L250,98 L295,98 L295,113" marker-end="url(#arrow)"/>
+    <path d="M445,115 L445,98 L490,98 L490,113" marker-end="url(#arrow)"/>
+  </g>
+  <g font-size="10" fill="#444444" text-anchor="middle">
+    <text x="272" y="72">CallSDKInitFailed</text>
+    <text x="272" y="85">广播 SDKInitFailed</text>
+    <text x="467" y="72">CallSDKLoginFailed</text>
+    <text x="467" y="85">广播 SDKLoginFailed</text>
+  </g>
+
+  <!-- transitions -->
+  <g stroke="#333333" stroke-width="1.5" fill="none">
+    <line x1="150" y1="140" x2="203" y2="140" marker-end="url(#arrow)"/>
+    <line x1="335" y1="140" x2="398" y2="140" marker-end="url(#arrow)"/>
+    <line x1="530" y1="140" x2="593" y2="140" marker-end="url(#arrow)"/>
+    <path d="M660,165 L660,270 L532,270" marker-end="url(#arrow)"/>
+  </g>
+  <g font-size="10" fill="#444444" text-anchor="middle">
+    <text x="176" y="133">Login()</text>
+    <text x="366" y="128">CallSDKInitSuccess</text>
+    <text x="366" y="140" font-size="9">(readyLogin)</text>
+    <text x="561" y="133">CallSDKLoginSuccess</text>
+    <text x="668" y="220" text-anchor="start">CallSDKLogoutSuccess</text>
+    <text x="668" y="233" text-anchor="start" font-size="9">广播 SDKLogoutSuccess</text>
+  </g>
+
+  <!-- UserSystem state nodes -->
+  <g stroke-width="1.5" font-size="12" text-anchor="middle">
+    <rect x="40" y="115" width="110" height="50" rx="8" fill="#dae8fc" stroke="#6c8ebf"/><text x="95" y="145" fill="#111">None</text>
+    <rect x="205" y="115" width="130" height="50" rx="8" fill="#d5e8d4" stroke="#82b366"/><text x="270" y="145" fill="#111">SDKIniting</text>
+    <rect x="400" y="115" width="130" height="50" rx="8" fill="#d5e8d4" stroke="#82b366"/><text x="465" y="145" fill="#111">SDKLogining</text>
+    <rect x="595" y="115" width="130" height="50" rx="8" fill="#ffe6cc" stroke="#d79b00"/><text x="660" y="145" fill="#111">SDKLogined</text>
+    <rect x="400" y="245" width="130" height="50" rx="8" fill="#f5f5f5" stroke="#666666"/><text x="465" y="275" fill="#111">SDKInited</text>
+  </g>
+
+  <text x="40" y="340" font-size="14" font-weight="bold" fill="#222">UserManager 状态机（States）</text>
+
+  <g stroke="#333333" stroke-width="1.5" fill="none">
+    <line x1="120" y1="393" x2="168" y2="393" marker-end="url(#arrow)"/>
+    <line x1="250" y1="393" x2="298" y2="393" marker-end="url(#arrow)"/>
+    <line x1="390" y1="393" x2="438" y2="393" marker-end="url(#arrow)"/>
+    <line x1="530" y1="393" x2="578" y2="393" marker-end="url(#arrow)"/>
+  </g>
+  <g font-size="9" fill="#444444" text-anchor="middle">
+    <text x="144" y="386">Login()/SDKLoginSuccess</text>
+    <text x="274" y="386">Init_Enter</text>
+    <text x="414" y="386">认证(TODO)</text>
+    <text x="554" y="386">登录(TODO)</text>
+  </g>
+
+  <g stroke-width="1.5" font-size="12" text-anchor="middle">
+    <rect x="30" y="370" width="90" height="46" rx="8" fill="#dae8fc" stroke="#6c8ebf"/><text x="75" y="398" fill="#111">None</text>
+    <rect x="170" y="370" width="80" height="46" rx="8" fill="#d5e8d4" stroke="#82b366"/><text x="210" y="398" fill="#111">Init</text>
+    <rect x="300" y="370" width="90" height="46" rx="8" fill="#fff2cc" stroke="#d6b656"/><text x="345" y="398" fill="#111">Authing</text>
+    <rect x="440" y="370" width="90" height="46" rx="8" fill="#fff2cc" stroke="#d6b656"/><text x="485" y="398" fill="#111">Logining</text>
+    <rect x="580" y="370" width="90" height="46" rx="8" fill="#ffe6cc" stroke="#d79b00"/><text x="625" y="398" fill="#111">Logined</text>
+  </g>
+  <text x="580" y="436" font-size="10" fill="#444444">Logined_Enter → callback(loginResponse)</text>
+</svg>

@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="600" viewBox="0 0 980 600" font-family="Helvetica,Arial,sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#333333"/>
+    </marker>
+    <marker id="arrowOpen" markerWidth="12" markerHeight="12" refX="9" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L9,4 L0,8" fill="none" stroke="#333333"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="980" height="600" fill="#ffffff"/>
+
+  <g stroke="#999999" stroke-dasharray="4,4">
+    <line x1="90" y1="76" x2="90" y2="470"/>
+    <line x1="250" y1="76" x2="250" y2="470"/>
+    <line x1="430" y1="76" x2="430" y2="470"/>
+    <line x1="610" y1="76" x2="610" y2="470"/>
+    <line x1="770" y1="76" x2="770" y2="470"/>
+  </g>
+
+  <g stroke-width="1.5" font-size="13" font-weight="bold" text-anchor="middle">
+    <rect x="20" y="40" width="140" height="36" fill="#dae8fc" stroke="#6c8ebf"/><text x="90" y="63" fill="#111">游戏业务</text>
+    <rect x="180" y="40" width="140" height="36" fill="#d5e8d4" stroke="#82b366"/><text x="250" y="63" fill="#111">UserManager</text>
+    <rect x="360" y="40" width="140" height="36" fill="#d5e8d4" stroke="#82b366"/><text x="430" y="63" fill="#111">UserSystem</text>
+    <rect x="540" y="40" width="140" height="36" fill="#ffe6cc" stroke="#d79b00"/><text x="610" y="63" fill="#111">SDK (ISDK)</text>
+    <rect x="700" y="40" width="140" height="36" fill="#f8cecc" stroke="#b85450"/><text x="770" y="63" fill="#111">原生平台</text>
+  </g>
+
+  <g stroke="#333333" stroke-width="1.5" fill="none">
+    <line x1="90" y1="110" x2="248" y2="110" marker-end="url(#arrow)"/>
+    <line x1="250" y1="150" x2="428" y2="150" marker-end="url(#arrow)"/>
+    <line x1="430" y1="190" x2="608" y2="190" marker-end="url(#arrow)"/>
+    <line x1="610" y1="230" x2="768" y2="230" marker-end="url(#arrow)"/>
+    <line x1="770" y1="275" x2="612" y2="275" stroke-dasharray="5,4" marker-end="url(#arrowOpen)"/>
+    <line x1="610" y1="320" x2="432" y2="320" marker-end="url(#arrow)"/>
+    <line x1="430" y1="400" x2="252" y2="400" stroke-dasharray="5,4" marker-end="url(#arrowOpen)"/>
+    <line x1="250" y1="445" x2="92" y2="445" stroke-dasharray="5,4" marker-end="url(#arrowOpen)"/>
+  </g>
+  <g font-size="11" fill="#111111" text-anchor="middle">
+    <text x="170" y="104">1: Pay(order)</text>
+    <text x="340" y="144">2: SDKPay(order, userData)</text>
+    <text x="520" y="184">3: sdk.Pay(order, userData)</text>
+    <text x="690" y="224">4: UnityCallNative("Pay", orderJson)</text>
+    <text x="690" y="269">5: PaySuccess / PayFailed / PayCancel</text>
+    <text x="520" y="314">6: CallSDKPaySuccess / Failed / Cancel</text>
+    <text x="340" y="394">7: onEvent(SDKPay*)</text>
+    <text x="170" y="439">8: 业务处理（发货确认 / 取消，预留位）</text>
+  </g>
+
+  <g stroke="#d6b656" fill="#fff2cc" stroke-width="1.2" font-size="11" text-anchor="middle">
+    <rect x="330" y="338" width="200" height="30"/><text x="430" y="357" fill="#111">TriggerEvent(fsm.State, SDKPay*)</text>
+  </g>
+
+  <g>
+    <rect x="20" y="490" width="820" height="52" fill="#f5f5f5" stroke="#666666" stroke-width="1.2"/>
+    <text x="30" y="510" font-size="11" fill="#333">编辑器 SIMULATION_MODE_SDK：NativeSDK.Pay 直接 HandleSDKCallback("PaySuccess")；UserSystem.SDKPay 在 UNITY_EDITOR 下额外 CallSDKPaySuccess("")。</text>
+    <text x="30" y="529" font-size="11" fill="#333">支付结果不改变登录状态机，仅通过 onEvent 广播订单号（PayFailed / PayCancel 携带 customorgerid）。</text>
+  </g>
+</svg>

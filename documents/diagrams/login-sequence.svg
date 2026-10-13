@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="780" viewBox="0 0 980 780" font-family="Helvetica,Arial,sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#333333"/>
+    </marker>
+    <marker id="arrowOpen" markerWidth="12" markerHeight="12" refX="9" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L9,4 L0,8" fill="none" stroke="#333333"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="980" height="780" fill="#ffffff"/>
+
+  <!-- lifelines -->
+  <g stroke="#999999" stroke-dasharray="4,4">
+    <line x1="90" y1="76" x2="90" y2="700"/>
+    <line x1="250" y1="76" x2="250" y2="700"/>
+    <line x1="430" y1="76" x2="430" y2="700"/>
+    <line x1="610" y1="76" x2="610" y2="700"/>
+    <line x1="770" y1="76" x2="770" y2="700"/>
+  </g>
+
+  <!-- participant headers -->
+  <g stroke-width="1.5" font-size="13" font-weight="bold" text-anchor="middle">
+    <rect x="20" y="40" width="140" height="36" fill="#dae8fc" stroke="#6c8ebf"/><text x="90" y="63" fill="#111">游戏业务</text>
+    <rect x="180" y="40" width="140" height="36" fill="#d5e8d4" stroke="#82b366"/><text x="250" y="63" fill="#111">UserManager</text>
+    <rect x="360" y="40" width="140" height="36" fill="#d5e8d4" stroke="#82b366"/><text x="430" y="63" fill="#111">UserSystem</text>
+    <rect x="540" y="40" width="140" height="36" fill="#ffe6cc" stroke="#d79b00"/><text x="610" y="63" fill="#111">SDK (ISDK)</text>
+    <rect x="700" y="40" width="140" height="36" fill="#f8cecc" stroke="#b85450"/><text x="770" y="63" fill="#111">原生平台</text>
+  </g>
+
+  <!-- messages -->
+  <g stroke="#333333" stroke-width="1.5" fill="none">
+    <line x1="90" y1="110" x2="248" y2="110" marker-end="url(#arrow)"/>
+    <line x1="250" y1="145" x2="428" y2="145" marker-end="url(#arrow)"/>
+    <line x1="430" y1="215" x2="608" y2="215" marker-end="url(#arrow)"/>
+    <line x1="610" y1="250" x2="768" y2="250" marker-end="url(#arrow)"/>
+    <line x1="770" y1="285" x2="612" y2="285" stroke-dasharray="5,4" marker-end="url(#arrowOpen)"/>
+    <line x1="610" y1="320" x2="432" y2="320" marker-end="url(#arrow)"/>
+    <line x1="430" y1="392" x2="608" y2="392" marker-end="url(#arrow)"/>
+    <line x1="610" y1="427" x2="768" y2="427" marker-end="url(#arrow)"/>
+    <line x1="770" y1="462" x2="612" y2="462" stroke-dasharray="5,4" marker-end="url(#arrowOpen)"/>
+    <line x1="610" y1="497" x2="432" y2="497" marker-end="url(#arrow)"/>
+    <line x1="430" y1="580" x2="252" y2="580" stroke-dasharray="5,4" marker-end="url(#arrowOpen)"/>
+    <line x1="250" y1="660" x2="92" y2="660" stroke-dasharray="5,4" marker-end="url(#arrowOpen)"/>
+  </g>
+  <g font-size="11" fill="#111111" text-anchor="middle">
+    <text x="170" y="104">1: Login(serverID, callback)</text>
+    <text x="340" y="139">2: HasLogined()? → Login()</text>
+    <text x="520" y="209">3: sdk.Init()</text>
+    <text x="690" y="244">4: UnityCallNative("Init")</text>
+    <text x="690" y="279">5: InitSuccess</text>
+    <text x="520" y="314">6: CallSDKInitSuccess(ret)</text>
+    <text x="520" y="386">7: sdk.Login()</text>
+    <text x="690" y="421">8: UnityCallNative("Login")</text>
+    <text x="690" y="456">9: LoginSuccess(user json)</text>
+    <text x="520" y="491">10: CallSDKLoginSuccess(user)</text>
+    <text x="340" y="574">11: onEvent(SDKLoginSuccess, uid)</text>
+    <text x="170" y="654">12: callback(loginResponse)</text>
+  </g>
+
+  <!-- self notes -->
+  <g stroke="#d6b656" fill="#fff2cc" stroke-width="1.2" font-size="11" text-anchor="middle">
+    <rect x="335" y="162" width="190" height="30"/><text x="430" y="181" fill="#111">SDKIniting_Enter → SDKInit()</text>
+    <rect x="325" y="337" width="210" height="30"/><text x="430" y="356" fill="#111">→ SDKLogining；广播 SDKInitSuccess</text>
+    <rect x="310" y="514" width="240" height="34"/><text x="430" y="535" fill="#111">保存 UserInfo → SDKLogined；广播 SDKLoginSuccess</text>
+    <rect x="150" y="597" width="200" height="30"/><text x="250" y="616" fill="#111">Init → Authing → Logining → Logined</text>
+  </g>
+
+  <!-- legend -->
+  <g>
+    <rect x="20" y="712" width="820" height="48" fill="#f5f5f5" stroke="#666666" stroke-width="1.2"/>
+    <text x="30" y="731" font-size="11" fill="#333">编辑器 SIMULATION_MODE_SDK：SDK 直接回调 HandleSDKCallback("InitSuccess"/"LoginSuccess")，不经原生平台。</text>
+    <text x="30" y="749" font-size="11" fill="#333">未接入游戏服时，步骤 11 后 UserManager 直接推进到 Logined，loginResponse 为 null。</text>
+  </g>
+</svg>
