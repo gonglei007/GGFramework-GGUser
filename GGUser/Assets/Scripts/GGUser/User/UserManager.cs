@@ -18,7 +18,7 @@ namespace GGFramework.GGUser
             Logined,    // 账户已登录
         }
 
-        private const bool AutoEnterGame = false;
+        private const bool AutoEnterGame = true;
 
         private int serverID = 0;
         private Action<JsonObject> loginCallback = null;
@@ -127,6 +127,8 @@ namespace GGFramework.GGUser
         private void Authing_Enter()
         {
             //TODO: 让游戏服务器去跟第三方后台作用户验证。
+            // 说明：尚未接入游戏服认证时，直接推进到登录阶段，保证 Login 回调可用。
+            fsm.ChangeState(States.Logining);
             //GONetworkManager.Instance.GameAuth(UserSystem.Instance.UserInfo.uid, UserSystem.Instance.UserInfo.token, (JsonObject response) => {
             //    // 检查reponse结果。
             //    // 如果验证成功，则登录。
@@ -159,6 +161,8 @@ namespace GGFramework.GGUser
         private void Logining_Enter()
         {
             //TODO: 游戏服作登录操作。
+            // 说明：尚未接入游戏服登录时，直接进入已登录状态，触发 Login 回调。
+            fsm.ChangeState(States.Logined);
             //GONetworkManager.Instance.GameLogin(UserSystem.Instance.UserInfo.uid, this.serverID, (JsonObject response) => {
             //    loginResponse = response;
             //    // 如果登录成功，则进入大厅。

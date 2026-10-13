@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 //using LuaInterface;
 using SimpleJson;
+using GGFramework.GGUser;
 using System.Runtime.InteropServices;
 
 /// <summary>
@@ -119,7 +120,7 @@ public class NativeLuaBridge : Singleton<NativeLuaBridge>
 		{
 			case "Pay":
 				{
-					UserSystem.Order order = JsonUtility.FromJson<UserSystem.Order>(jsonString);
+					Order order = JsonUtility.FromJson<Order>(jsonString);
 					string productId = order.productID;
 					string productName = order.name;
 					int amount = order.amount;

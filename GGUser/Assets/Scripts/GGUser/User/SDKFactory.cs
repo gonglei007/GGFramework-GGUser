@@ -26,10 +26,10 @@ namespace GGFramework.GGUser
                     //sdk = new QuickSDKImpl();
                     break;
                 case SDKTarget.ZhiShangSDK:
-                    //sdk = new ZhiShangSDK();
+                    sdk = new ZhiShangSDK();
                     break;
                 case SDKTarget.NativeSDK:
-                    //sdk = new NativeSDK();
+                    sdk = new NativeSDK();
                     break;
                 default:
                     break;

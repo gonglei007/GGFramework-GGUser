@@ -246,17 +246,26 @@ namespace GGFramework.GGUser
 
         public void SDKLogout()
         {
-            sdk.Logout();
+            if (sdk != null)
+            {
+                sdk.Logout();
+            }
         }
 
         public void SDKQuit()
         {
-            sdk.Quit();
+            if (sdk != null)
+            {
+                sdk.Quit();
+            }
         }
 
         public void SDKPay(Order order, UserData userData = null)
         {
-            sdk.Pay(order, userData);
+            if (sdk != null)
+            {
+                sdk.Pay(order, userData);
+            }
 #if UNITY_EDITOR
             CallSDKPaySuccess("");
 #endif

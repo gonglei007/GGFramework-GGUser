@@ -140,7 +140,7 @@ namespace GGFramework.GGUser
         }
         else{
             JsonObject orderJsonObject = SimpleJson.SimpleJson.DeserializeObject<JsonObject>(order.GetJsonString());
-            JsonObject userJsonObject = SimpleJson.SimpleJson.DeserializeObject<JsonObject>(order.GetJsonString());
+            JsonObject userJsonObject = SimpleJson.SimpleJson.DeserializeObject<JsonObject>(userData.GetJsonString());
             foreach (string jKey in userJsonObject.Keys)
             {
                 if (!orderJsonObject.ContainsKey(jKey)) {

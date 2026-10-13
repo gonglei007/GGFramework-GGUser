@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using GGFramework.GGUser;
 #if QUICK_SDK
 using quicksdk;
 
@@ -252,7 +253,7 @@ public class QuickSDKEventHandle : QuickSDKListener {
 
 	public override void onLoginSuccess(UserInfo userInfo)
 	{
-		UserSystem.Instance.CallSDKLoginSuccess(new UserSystem.User(userInfo.uid, userInfo.token, QuickSDK.getInstance().getConfigValue("ChannelID")));
+		UserSystem.Instance.CallSDKLoginSuccess(new User(userInfo.uid, userInfo.token, "", QuickSDK.getInstance().getConfigValue("ChannelID")));
 		//showLog("onLoginSuccess", "uid: " + userInfo.uid + " ,username: " + userInfo.userName + " ,userToken: " + userInfo.token + ", msg: " + userInfo.errMsg);
 		//Application.LoadLevel ("scene2");
 
