@@ -1,0 +1,126 @@
+<mxfile host="app.diagrams.net" agent="GGUser" version="21.0.0">
+  <diagram id="gguser-agg-arch" name="聚合平台架构">
+    <mxGraphModel dx="1000" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="920" pageHeight="600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="band1" value="游戏业务层" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;verticalAlign=top;align=left;spacingLeft=8;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="560" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="band2" value="GGPlatform 聚合门面" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;verticalAlign=top;align=left;spacingLeft=8;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="40" y="120" width="560" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="band3" value="能力抽象（可组合）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;verticalAlign=top;align=left;spacingLeft=8;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="40" y="280" width="560" height="76" as="geometry" />
+        </mxCell>
+        <mxCell id="band4" value="渠道适配器（插件）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;verticalAlign=top;align=left;spacingLeft=8;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="40" y="376" width="560" height="94" as="geometry" />
+        </mxCell>
+        <mxCell id="band5" value="原生平台 / 桥接" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;verticalAlign=top;align=left;spacingLeft=8;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="40" y="490" width="560" height="66" as="geometry" />
+        </mxCell>
+        <mxCell id="bandSrv" value="自建服务端" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#eef7ff;strokeColor=#6c8ebf;verticalAlign=top;align=left;spacingLeft=8;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="650" y="120" width="230" height="346" as="geometry" />
+        </mxCell>
+
+        <mxCell id="biz" value="游戏逻辑 / UI" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="230" y="52" width="180" height="34" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ggplatform" value="GGPlatform 门面&#10;Login / Pay / Restore / SubmitData" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="60" y="140" width="220" height="52" as="geometry" />
+        </mxCell>
+        <mxCell id="router" value="ChannelRouter&#10;平台约束 / 优先级 / fallback" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="320" y="140" width="220" height="52" as="geometry" />
+        </mxCell>
+        <mxCell id="registry" value="ChannelRegistry + Factory&#10;配置驱动 · 多渠道并存" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="60" y="200" width="220" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="gwclient" value="GGGatewayClient&#10;统一网关客户端" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="320" y="200" width="220" height="48" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ilogin" value="ILoginChannel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="70" y="294" width="180" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="ipay" value="IPayChannel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="300" y="294" width="180" height="46" as="geometry" />
+        </mxCell>
+
+        <mxCell id="apple" value="AppleStore&#10;:IPayChannel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="52" y="392" width="124" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="google" value="GooglePlay&#10;:IPayChannel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="188" y="392" width="124" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="custom" value="Custom&#10;:ILogin+IPay" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="324" y="392" width="124" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="legacy" value="Native / ZhiShang&#10;（现有适配器化）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="460" y="392" width="128" height="58" as="geometry" />
+        </mxCell>
+
+        <mxCell id="bridge" value="NativeLuaBridge / Unity IAP&#10;Android · iOS 双向桥接" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="120" y="504" width="400" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="appleVal" value="AppleValidator&#10;App Store Server API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="666" y="150" width="198" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="googleVal" value="GoogleValidator&#10;Play Developer API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="666" y="204" width="198" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="customVal" value="CustomValidator&#10;自定义校验" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="666" y="258" width="198" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="gwcore" value="发货 / 掉单补偿&#10;对账 / 风控 / 退款&#10;配置下发" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="666" y="316" width="198" height="130" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="biz" target="ggplatform">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" value="路由" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="ggplatform" target="router">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="获取渠道" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="ggplatform" target="registry">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" value="注册" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;dashed=1;" edge="1" parent="1" source="registry" target="router">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" value="选支付渠道" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="router" target="ipay">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" value="realize" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=0;dashed=1;" edge="1" parent="1" source="apple" target="ipay">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" value="realize" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=0;dashed=1;" edge="1" parent="1" source="google" target="ipay">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" value="realize" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=0;dashed=1;" edge="1" parent="1" source="custom" target="ilogin">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" value="realize" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=0;dashed=1;" edge="1" parent="1" source="legacy" target="ipay">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="apple" target="bridge">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="google" target="bridge">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" value="HTTPS /verify" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeWidth=2;strokeColor=#6c8ebf;" edge="1" parent="1" source="gwclient" target="gwcore">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" value="分发" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;dashed=1;" edge="1" parent="1" source="gwcore" target="appleVal">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" value="分发" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;dashed=1;" edge="1" parent="1" source="gwcore" target="googleVal">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

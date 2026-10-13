@@ -77,6 +77,8 @@ GGUser 是一个面向游戏客户端的**用户系统与 SDK 接入管理框架
 | `User/ISDK`、`User/SDKFactory` | SDK 抽象接口与工厂（策略模式） |
 | `User/QuickSDK`、`ZhiShangSDK`、`NativeSDK`、`InternalSDK` | 各渠道 SDK 实现 |
 | `Platform/NativeLuaBridge`、`PlatformInterfaces`、`AndroidInterfaces` | 原生平台桥接 |
+| `Platform/GGPlatform` | 聚合平台门面（MVP）：渠道路由 / 支付全链路 / 登录换 token / 掉单补单 |
+| `Channels`、`Models`、`Config` | 聚合平台能力抽象（`ILoginChannel`/`IPayChannel`）、归一化模型、配置驱动（详见[聚合平台设计文档](/documents/aggregation-platform-design.md)） |
 
 ## 依赖
 
@@ -97,6 +99,7 @@ GGUser 是一个面向游戏客户端的**用户系统与 SDK 接入管理框架
 * [如何快速接入?](/documents/quickstart.md)
 * [技术手册](/documents/manual.md)
 * [技术设计文档](/documents/technical-design.md)（架构 / 登录 / 支付 / 状态机图）
+* [聚合平台设计文档](/documents/aggregation-platform-design.md)（自建聚合层：AppStore / GooglePlay / 自定义渠道统一接入）
 
 ### 架构图表（draw.io）
 
@@ -106,6 +109,9 @@ GGUser 是一个面向游戏客户端的**用户系统与 SDK 接入管理框架
 | 登录时序 | [login-sequence.svg](/documents/diagrams/login-sequence.svg) | [login-sequence.drawio](/documents/diagrams/login-sequence.drawio) |
 | 支付时序 | [pay-sequence.svg](/documents/diagrams/pay-sequence.svg) | [pay-sequence.drawio](/documents/diagrams/pay-sequence.drawio) |
 | 状态机 | [state-machine.svg](/documents/diagrams/state-machine.svg) | [state-machine.drawio](/documents/diagrams/state-machine.drawio) |
+| 聚合平台架构 | [aggregation-architecture.svg](/documents/diagrams/aggregation-architecture.svg) | [aggregation-architecture.drawio](/documents/diagrams/aggregation-architecture.drawio) |
+| 聚合支付时序 | [aggregation-pay-sequence.svg](/documents/diagrams/aggregation-pay-sequence.svg) | [aggregation-pay-sequence.drawio](/documents/diagrams/aggregation-pay-sequence.drawio) |
+| 渠道路由 | [channel-routing.svg](/documents/diagrams/channel-routing.svg) | [channel-routing.drawio](/documents/diagrams/channel-routing.drawio) |
 
 ## 进群沟通
 
@@ -117,6 +123,7 @@ GGUser 是一个面向游戏客户端的**用户系统与 SDK 接入管理框架
 
 * 完善 Login 环节的「游戏服认证 / 登录」对接（当前为预留位，可与 GGNetwork 组合）。未接入游戏服时，`Login` 会直接推进到已登录并触发回调，此时回调参数 `loginResponse` 为 `null`
 * 更完整的 Demo 演示 与 一键对接说明
+* 聚合平台（MVP 已落地客户端骨架）：待补真实渠道适配器（`AppleStoreChannel` / `GooglePlayChannel` / `CustomChannel` / `Legacy`）、自建服务端网关本体，以及与 `UserManager` 游戏服认证 TODO 的对接
 
 ## 更多资料
 

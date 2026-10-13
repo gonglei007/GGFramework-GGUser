@@ -1,0 +1,95 @@
+<mxfile host="app.diagrams.net" agent="GGUser" version="21.0.0">
+  <diagram id="gguser-agg-pay" name="聚合支付时序">
+    <mxGraphModel dx="1000" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="780" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="p_game" value="游戏业务" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="40" width="140" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="p_gg" value="GGPlatform 门面" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="40" width="140" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="p_router" value="ChannelRouter" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="340" y="40" width="140" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="p_chan" value="IPayChannel" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="500" y="40" width="140" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="p_store" value="商店 Apple/Google" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="660" y="40" width="140" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="p_gw" value="GGPay 网关(服务端)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="820" y="40" width="160" height="36" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ll_game" style="html=1;endArrow=none;dashed=1;strokeColor=#999999;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="90" y="76" as="sourcePoint" /><mxPoint x="90" y="686" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="ll_gg" style="html=1;endArrow=none;dashed=1;strokeColor=#999999;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="250" y="76" as="sourcePoint" /><mxPoint x="250" y="686" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="ll_router" style="html=1;endArrow=none;dashed=1;strokeColor=#999999;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="410" y="76" as="sourcePoint" /><mxPoint x="410" y="686" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="ll_chan" style="html=1;endArrow=none;dashed=1;strokeColor=#999999;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="570" y="76" as="sourcePoint" /><mxPoint x="570" y="686" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="ll_store" style="html=1;endArrow=none;dashed=1;strokeColor=#999999;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="730" y="76" as="sourcePoint" /><mxPoint x="730" y="686" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="ll_gw" style="html=1;endArrow=none;dashed=1;strokeColor=#999999;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="900" y="76" as="sourcePoint" /><mxPoint x="900" y="686" as="targetPoint" /></mxGeometry>
+        </mxCell>
+
+        <mxCell id="m1" value="1: Pay(PayRequest{unifiedProductId, orderId})" style="html=1;endArrow=block;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="90" y="112" as="sourcePoint" /><mxPoint x="250" y="112" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="m2" value="2: Resolve(ctx: 平台/地区/商品)" style="html=1;endArrow=block;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="250" y="148" as="sourcePoint" /><mxPoint x="410" y="148" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="m3" value="3: 选中渠道(apple/google/custom)" style="html=1;endArrow=open;dashed=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="410" y="184" as="sourcePoint" /><mxPoint x="250" y="184" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="m4" value="4: QueryProducts / Purchase(req)" style="html=1;endArrow=block;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="250" y="224" as="sourcePoint" /><mxPoint x="570" y="224" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="m5" value="5: launchBillingFlow / addPayment" style="html=1;endArrow=block;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="570" y="260" as="sourcePoint" /><mxPoint x="730" y="260" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="m6" value="6: 扣款成功 + receipt/token (异步)" style="html=1;endArrow=open;dashed=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="730" y="300" as="sourcePoint" /><mxPoint x="570" y="300" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="m7" value="7: PurchaseResult{receipt, token, txId}" style="html=1;endArrow=open;dashed=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="570" y="336" as="sourcePoint" /><mxPoint x="250" y="336" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="m8" value="8: POST /verify {channel, receipt, orderId}" style="html=1;endArrow=block;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="250" y="376" as="sourcePoint" /><mxPoint x="900" y="376" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="n9" value="9: 按 channel 分发 Validator 校验票据&#10;（Apple verifyReceipt / Google purchases.get / Custom）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="640" y="392" width="340" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="m10" value="10: {delivered, items}" style="html=1;endArrow=open;dashed=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="900" y="460" as="sourcePoint" /><mxPoint x="250" y="460" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="m11" value="11: FinishTransaction(txId) / consume" style="html=1;endArrow=block;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="250" y="498" as="sourcePoint" /><mxPoint x="570" y="498" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="m12" value="12: finishTransaction / consumeAsync" style="html=1;endArrow=block;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="570" y="534" as="sourcePoint" /><mxPoint x="730" y="534" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="m13" value="13: onEvent(PayVerifySuccess / Delivered)" style="html=1;endArrow=open;dashed=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="250" y="574" as="sourcePoint" /><mxPoint x="90" y="574" as="targetPoint" /></mxGeometry>
+        </mxCell>
+        <mxCell id="n14" value="掉单补单：启动时 IPayChannel.QueryUnfinished() 拉取未完成事务 → 走同样的 8~12 校验/发货/finish 流程；网关侧对未确认订单保留重试队列。" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#eef7ff;strokeColor=#6c8ebf;fontSize=10;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="120" y="602" width="700" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend" value="铁律：只有第 10 步服务端确认 delivered 后，客户端才执行第 11/12 步 FinishTransaction / consume，避免扣款未到账或重复发货。&#10;编辑器下由 SimulationChannel 直接回调 PurchaseResult，可脱离真机跑通全链路。" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="20" y="700" width="960" height="50" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

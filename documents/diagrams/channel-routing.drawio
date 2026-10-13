@@ -1,0 +1,66 @@
+<mxfile host="app.diagrams.net" agent="GGUser" version="21.0.0">
+  <diagram id="gguser-agg-route" name="渠道路由">
+    <mxGraphModel dx="1000" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="940" pageHeight="560" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="start" value="收到 PayRequest(ctx)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="370" y="24" width="200" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="build" value="构建候选渠道队列&#10;平台硬约束 + 配置优先级" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="350" y="104" width="240" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="note" value="队列构建规则：&#10;· iOS：[AppStore]（虚拟商品强制）&#10;· Android 海外：[GooglePlay, …]&#10;· Android 国内：[自定义 / 第三方 按配置]&#10;· routeHint 可强制指定渠道" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#eef7ff;strokeColor=#6c8ebf;align=left;spacingLeft=8;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="30" y="92" width="290" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="decEmpty" value="队列非空?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="380" y="196" width="180" height="84" as="geometry" />
+        </mxCell>
+        <mxCell id="take" value="取队首渠道&#10;Connect + QueryProducts" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="350" y="316" width="240" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="decOk" value="可用?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="380" y="408" width="180" height="84" as="geometry" />
+        </mxCell>
+        <mxCell id="selected" value="选中渠道&#10;→ 进入购买 / 校验流程" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="418" width="210" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="pop" value="出队该渠道" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="640" y="316" width="180" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="failEnd" value="全部失败：降级 / 报错&#10;（UIAdaptor 弹窗）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="640" y="200" width="190" height="56" as="geometry" />
+        </mxCell>
+
+        <mxCell id="r1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="start" target="build">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="build" target="decEmpty">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r3" value="是 / 有候选" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="decEmpty" target="take">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r4" value="否 / 队列空" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="decEmpty" target="failEnd">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="take" target="decOk">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r6" value="是 / 可用" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="decOk" target="selected">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r7" value="否 / 不可用" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="decOk" target="pop">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r8" value="回退 fallback" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;dashed=1;" edge="1" parent="1" source="pop" target="decEmpty">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;dashed=1;" edge="1" parent="1" source="note" target="build">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
