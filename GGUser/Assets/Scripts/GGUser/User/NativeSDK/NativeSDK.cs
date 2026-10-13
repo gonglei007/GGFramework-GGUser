@@ -44,7 +44,7 @@ namespace GGFramework.GGUser
                     {
                         UserSystem.Instance.UIAdaptor.ShowDialog("登录异常", "解析参数有异常:" + e.ToString() + "" + jsonString, true, (ret) => {
                         });
-                        throw e;
+                        throw;
                     }
                     break;
                 case "LoginFailed":
@@ -63,7 +63,7 @@ namespace GGFramework.GGUser
                     {
                         UserSystem.Instance.UIAdaptor.ShowDialog("支付失败", "解析参数有异常:" + jsonString, true, (ret) => {
                         });
-                        throw e;
+                        throw;
                     }
                     break;
                 case "PayCancel":

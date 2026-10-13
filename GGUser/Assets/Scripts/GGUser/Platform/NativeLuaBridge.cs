@@ -165,7 +165,7 @@ public class NativeLuaBridge : Singleton<NativeLuaBridge>
 		catch (Exception e)
 		{
 			Debug.LogError(e);
-			throw e;
+			throw;
 		}
 	}
 }

@@ -30,6 +30,10 @@ public class ZhiShangSDK: ISDK
                     JsonObject jsonObject = SimpleJson.SimpleJson.DeserializeObject<JsonObject>(jsonString);
                     User user = new User();
                     user.uid = jsonObject["accountid"].ToString();
+                    if (jsonObject.ContainsKey("token"))
+                    {
+                        user.token = jsonObject["token"].ToString();
+                    }
                     user.channel = UserSystem.Instance.Channel;
                     UserSystem.Instance.CallSDKLoginSuccess(user);
                 }
@@ -37,7 +41,7 @@ public class ZhiShangSDK: ISDK
                 {
                     UserSystem.Instance.UIAdaptor.ShowDialog("登录异常", "解析参数有异常:" + e.ToString() + "" + jsonString, true, (ret) => {
                     });
-                    throw e;
+                    throw;
                 }
                 break;
             case "LoginFailed":
@@ -55,7 +59,7 @@ public class ZhiShangSDK: ISDK
                 catch (Exception e) {
                     UserSystem.Instance.UIAdaptor.ShowDialog("支付失败", "解析参数有异常:" + jsonString, true, (ret) => {
                     });
-                    throw e;
+                    throw;
                 }
                 break;
             case "PayCancel":

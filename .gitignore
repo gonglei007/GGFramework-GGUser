@@ -1,6 +1,7 @@
 GGUser/Library
 GGUser/Logs
 GGUser/Temp
+GGUser/obj
 GGUser/.vs
 .vsconfig
 extensions.json

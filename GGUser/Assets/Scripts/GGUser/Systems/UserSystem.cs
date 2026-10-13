@@ -303,9 +303,9 @@ namespace GGFramework.GGUser
         public void CallSDKInitFailed(string ret)
         {
             Debug.LogWarning("初始化失败:" + ret);
-            SetEvent(States.SDKIniting, new Event(Events.SDKInitFailed, ret));
-            UserSystem.Instance.ChangeState(UserSystem.States.SDKIniting, 1.0f);
-            //TriggerEvent(States.SDKIniting, Events.SDKInitFailed, ret);
+            // 直接广播失败事件（状态机切换到相同状态不会重新进入，原重试逻辑无效）。
+            // 重试与否交由业务层（如 UserManager 弹窗）决定。
+            TriggerEvent(fsm.State, Events.SDKInitFailed, ret);
         }
 
         static int failedCount = 2;
@@ -326,17 +326,16 @@ namespace GGFramework.GGUser
         public void CallSDKLoginFailed(string ret)
         {
             Debug.LogWarning("登录失败:" + ret);
-            SetEvent(States.SDKLogining, new Event(Events.SDKLoginFailed, ret));
-            UserSystem.Instance.ChangeState(UserSystem.States.SDKLogining, 1.0f);
-            //TriggerEvent(States.SDKLogining, Events.SDKLoginFailed, ret);
+            // 直接广播失败事件，避免登记在当前状态导致事件丢失。
+            TriggerEvent(fsm.State, Events.SDKLoginFailed, ret);
         }
 
         public void CallSDKLogoutSuccess(string ret)
         {
             Debug.LogWarning("登出成功:" + ret);
-            SetEvent(States.SDKLogining, new Event(Events.SDKLogoutSuccess, ret));
+            // 先广播登出事件，再回到已初始化状态。
+            TriggerEvent(fsm.State, Events.SDKLogoutSuccess, ret);
             UserSystem.Instance.ChangeState(UserSystem.States.SDKInited);
-            //TriggerEvent(States.SDKLogined, Events.SDKLogoutSuccess, ret);
         }
 
         public void CallSDKPaySuccess(string ret)
