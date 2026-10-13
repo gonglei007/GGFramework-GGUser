@@ -8,5 +8,5 @@ public static class Global
     /// NativeLuaBridge.UnityCallNative 会通过 AndroidJavaClass 反射该类并调用其静态方法 "CallInterface"。
     /// 接入真机时请修改为你的原生接口类名。
     /// </summary>
-    public static string AndroidInterfaceName = "com.ggframework.gguser.UnityInterface";
+    public static string AndroidInterfaceName = "com.yourcompany.sampleproject.UnityInterface";
 }

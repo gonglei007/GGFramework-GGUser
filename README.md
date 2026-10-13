@@ -64,7 +64,12 @@ GGUser 是一个面向游戏客户端的**用户系统与 SDK 接入管理框架
     <tr>
         <td>GGUser/Assets/Demo</td>
         <td>演示工程</td>
-        <td>演示最小初始化用法。</td>
+        <td>打开 <code>Demo.unity</code> 直接运行：uGUI 面板演示聚合平台初始化 / 登录 / 支付 / 补单全链路。</td>
+    </tr>
+    <tr>
+        <td>GGUser/Assets/Tests</td>
+        <td>单元测试</td>
+        <td>基于 Unity Test Framework 的 EditMode / PlayMode 用例（详见下方「测试」）。</td>
     </tr>
 </table>
 
@@ -84,6 +89,20 @@ GGUser 是一个面向游戏客户端的**用户系统与 SDK 接入管理框架
 
 * **MonsterLove/StateMachine** — Unity 轻量状态机库（位于 `Assets/LocalPackages`）
 * **SimpleJson** — 轻量 JSON 序列化库（位于 `Assets/LocalPackages`）
+* **Unity Test Framework** — `com.unity.test-framework`（单元测试，见下方「测试」）
+
+## 测试
+
+基于 **Unity Test Framework**，用例位于 `GGUser/Assets/Tests/`：
+
+| 类型 | 目录 | 覆盖 |
+| ---- | ---- | ---- |
+| EditMode | `Tests/EditMode/` | 聚合平台 MVP（纯 C#）：`PlatformConfig` 解析/商品映射、`PayModels` 序列化、`ChannelRegistry` 懒创建与能力探测、`ChannelRouter` 平台硬约束/优先级/去重/回退候选、`GGGatewayClient` 校验与换 token、`SimulationChannel`、`GGPlatform` 支付全链路/fallback/校验未过不结束事务/补单 |
+| PlayMode | `Tests/PlayMode/` | 遗留链路：`UserSystem` SDK 回调 → 状态机 → 事件广播、支付事件；`UserManager` 事件订阅、支付委托、登录成功推进 |
+
+**运行**：Unity 菜单 `Window → General → Test Runner`，在 **EditMode** / **PlayMode** 页签运行全部用例。
+
+> 为支持测试程序集引用，工程引入了 Assembly Definition：`SimpleJson`、`MonsterLove.StateMachine`、`GGFramework.GGUser`（`Assets/Scripts`），以及测试程序集 `GGFramework.GGUser.Tests.EditMode` / `.PlayMode`（`defineConstraints: UNITY_INCLUDE_TESTS`，不进入正式构建）。`Demo` 仍在预定义的 `Assembly-CSharp`，自动引用上述程序集。
 
 ## 设计模式
 
@@ -122,7 +141,7 @@ GGUser 是一个面向游戏客户端的**用户系统与 SDK 接入管理框架
 ## TODO-List
 
 * 完善 Login 环节的「游戏服认证 / 登录」对接（当前为预留位，可与 GGNetwork 组合）。未接入游戏服时，`Login` 会直接推进到已登录并触发回调，此时回调参数 `loginResponse` 为 `null`
-* 更完整的 Demo 演示 与 一键对接说明
+* 一键对接说明 / 更多 Demo 场景（当前 `Demo.unity` 已以 uGUI 演示聚合平台全链路）
 * 聚合平台（MVP 已落地客户端骨架）：待补真实渠道适配器（`AppleStoreChannel` / `GooglePlayChannel` / `CustomChannel` / `Legacy`）、自建服务端网关本体，以及与 `UserManager` 游戏服认证 TODO 的对接
 
 ## 更多资料

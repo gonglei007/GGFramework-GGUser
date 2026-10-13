@@ -392,6 +392,15 @@ gg.Pay(req, ctx, outcome =>
 gg.ProcessUnfinished("appleStore", outcome => { /* ... */ });
 ```
 
+### 14.3 测试
+
+已基于 **Unity Test Framework** 为聚合平台 MVP 补齐单元测试（`GGUser/Assets/Tests/`）：
+
+- **EditMode**（`Tests/EditMode/`）：覆盖纯 C# 的聚合层——`PlatformConfig`（解析/商品映射/回退）、`PayModels`（序列化）、`ChannelRegistry`（懒创建/缓存/能力探测）、`ChannelRouter`（平台硬约束/优先级链/`routeHint`/去重/未注册跳过）、`GGGatewayClient`（模拟校验/注入传输解析/换 token）、`SimulationChannel`，以及 `GGPlatform` 的支付全链路、**可用性 fallback**、**校验未通过不结束事务（铁律）**、启动补单。
+- **PlayMode**（`Tests/PlayMode/`）：覆盖遗留 `UserSystem`/`UserManager` 的「SDK 回调 → 状态机 → 事件广播」与支付委托链路（经公开回调入口驱动，不依赖原生桥接）。
+
+> 为让测试程序集能引用被测代码，工程引入了 Assembly Definition：`SimpleJson` / `MonsterLove.StateMachine` / `GGFramework.GGUser`（`Assets/Scripts`）+ 两个测试程序集（`defineConstraints: UNITY_INCLUDE_TESTS`，不进入正式构建）。运行：`Window → General → Test Runner`。
+
 ---
 
 ## 15. 图表源文件与维护
