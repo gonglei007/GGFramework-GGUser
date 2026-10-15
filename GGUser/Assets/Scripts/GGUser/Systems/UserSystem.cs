@@ -226,10 +226,12 @@ namespace GGFramework.GGUser
             if (sdk != null)
             {
                 sdk.Init();
+                return;
             }
-
 #if UNITY_EDITOR
-            CallSDKInitSuccess("Editor init success!");
+            // 编辑器下 sdk 未创建时的兜底：真实 SDK 存在时应由 SDK 自身触发回调，
+            // 避免与 NativeSDK 的 SIMULATION_MODE_SDK 分支重复广播（P0 修复）。
+            CallSDKInitSuccess("Editor init success (no SDK)!");
 #endif
         }
 
@@ -238,6 +240,7 @@ namespace GGFramework.GGUser
             if (sdk != null)
             {
                 sdk.Login();
+                return;
             }
 #if UNITY_EDITOR
             CallSDKLoginSuccess(new User(UserSystem.LoadUID(), "", "", this.Channel));
@@ -265,6 +268,7 @@ namespace GGFramework.GGUser
             if (sdk != null)
             {
                 sdk.Pay(order, userData);
+                return;
             }
 #if UNITY_EDITOR
             CallSDKPaySuccess("");

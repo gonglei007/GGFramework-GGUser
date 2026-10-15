@@ -240,21 +240,57 @@ namespace GGFramework.GGUser
         }
 
         // ---------------- 补单 / 恢复 ----------------
-        /// <summary>启动补单：拉取未完成事务，走同样的校验/发货/finish 流程。</summary>
+        /// <summary>
+        /// 启动补单：拉取未完成事务，逐笔走同样的校验/发货/finish 流程。
+        /// onEach 每处理一笔回调一次；onAllDone 在全部处理完毕后回调一次（可选）。
+        /// 保留旧的单参数重载以兼容现有调用方（此时 onEach == callback，无 onAllDone）。
+        /// </summary>
         public void ProcessUnfinished(string channelId, Action<PayOutcome> callback)
+        {
+            ProcessUnfinished(channelId, callback, null);
+        }
+
+        public void ProcessUnfinished(string channelId, Action<PayOutcome> onEach, Action onAllDone)
         {
             EnsureInit();
             IPayChannel channel = Registry.GetPay(channelId);
-            if (channel == null) return;
+            if (channel == null)
+            {
+                if (onAllDone != null) onAllDone();
+                return;
+            }
 
             channel.QueryUnfinished(delegate(List<PurchaseResult> list)
             {
-                if (list == null) return;
+                if (list == null || list.Count == 0)
+                {
+                    if (onAllDone != null) onAllDone();
+                    return;
+                }
+
+                // 仅对 Purchased 状态的事务走校验；其余直接跳过。
+                List<PurchaseResult> targets = new List<PurchaseResult>();
                 foreach (PurchaseResult r in list)
                 {
                     if (r == null || r.state != PurchaseState.Purchased) continue;
                     r.channel = channel.ChannelId;
-                    VerifyAndDeliver(channel, r, callback);
+                    targets.Add(r);
+                }
+                if (targets.Count == 0)
+                {
+                    if (onAllDone != null) onAllDone();
+                    return;
+                }
+
+                int remaining = targets.Count;
+                foreach (PurchaseResult r in targets)
+                {
+                    VerifyAndDeliver(channel, r, delegate(PayOutcome o)
+                    {
+                        if (onEach != null) onEach(o);
+                        remaining--;
+                        if (remaining <= 0 && onAllDone != null) onAllDone();
+                    });
                 }
             });
         }

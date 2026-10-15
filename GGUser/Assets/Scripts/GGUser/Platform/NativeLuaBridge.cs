@@ -40,8 +40,10 @@ public class NativeLuaBridge : Singleton<NativeLuaBridge>
 	{
         DontDestroyOnLoad(gameObject);
 		Debug.Log("=========== NativeLuaBridge is working! ===========");
+#if UNITY_EDITOR
+		// 仅编辑器下自检日志，真机上不再向原生发送未定义的 "Test" 方法（P1 修复）。
 		UnityCallNative("Test", "Hello-->");
-
+#endif
 	}
 
 	public void Init()
@@ -61,11 +63,17 @@ public class NativeLuaBridge : Singleton<NativeLuaBridge>
 #if UNITY_ANDROID && !UNITY_EDITOR
 		if (Application.platform == RuntimePlatform.Android)
 		{
-	        AndroidJavaClass androidInterface = new AndroidJavaClass(Global.AndroidInterfaceName);
-		    if (androidInterface == null) {
-			    throw new Exception("没有找到AndroidJavaClass！-" + Global.AndroidInterfaceName);
-            }
-            return androidInterface.CallStatic<string>("CallInterface", methodName, jsonString);
+	        // new AndroidJavaClass(...) 在类未找到时抛 AndroidJavaException，不会返回 null，需 try-catch。
+	        try
+	        {
+	            AndroidJavaClass androidInterface = new AndroidJavaClass(Global.AndroidInterfaceName);
+	            return androidInterface.CallStatic<string>("CallInterface", methodName, jsonString);
+	        }
+	        catch (Exception e)
+	        {
+	            Debug.LogError("[NativeLuaBridge] 反射 Android 接口失败: " + Global.AndroidInterfaceName + " / " + e.Message);
+	            throw;
+	        }
 		}
 #endif
 #if UNITY_IOS && !UNITY_EDITOR

@@ -25,6 +25,8 @@ namespace GGFramework.GGUser
         private JsonObject loginResponse = null;
         private UserSystem.UserData userData = new UserSystem.UserData();
         private StateMachine<States> fsm;
+        // P2 修复：保存 UserSystem.onEvent 订阅句柄，重复 Init 时先退订避免事件重放。
+        private Action<UserSystem.States, UserSystem.Events, object> userSystemHandler = null;
 
         public UserSystem UserSystem
         {
@@ -53,14 +55,20 @@ namespace GGFramework.GGUser
         public void Init(string channel = null)
         {
             UserSystem.Instance.Init(channel);
-            UserSystem.Instance.onEvent += (UserSystem.States state, UserSystem.Events @event, object param) =>
+            // 先退订旧句柄（如有），避免重复 Init 时同一事件被多个 lambda 处理。
+            if (userSystemHandler != null)
+            {
+                UserSystem.Instance.onEvent -= userSystemHandler;
+                userSystemHandler = null;
+            }
+            userSystemHandler = (UserSystem.States state, UserSystem.Events @event, object param) =>
             {
                 //StatisticSystem.Instance.SendEvent(@event.ToString());
                 switch (@event)
                 {
                     case UserSystem.Events.SDKLoginSuccess:
                         Debug.LogWarning("是否已经登录:" + UserSystem.Instance.HasLogined().ToString());
-                        Debug.LogWarning("===>准备验证:" + param.ToString());// + "-状态:" + fsm.current);
+                        Debug.LogWarning("===>准备验证:" + (param != null ? param.ToString() : "null"));// + "-状态:" + fsm.current);
                         if (AutoEnterGame)
                         {
                             fsm.ChangeState(States.Init);
@@ -84,6 +92,7 @@ namespace GGFramework.GGUser
                         break;
                 }
             };
+            UserSystem.Instance.onEvent += userSystemHandler;
         }
         public void Login(int serverID, Action<JsonObject> callback)
         {

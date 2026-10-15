@@ -42,7 +42,8 @@ namespace GGFramework.GGUser
                     }
                     catch (Exception e)
                     {
-                        UserSystem.Instance.UIAdaptor.ShowDialog("登录异常", "解析参数有异常:" + e.ToString() + "" + jsonString, true, (ret) => {
+                        Debug.LogError("[NativeSDK] LoginSuccess 解析异常: " + e);
+                        UserSystem.Instance.UIAdaptor.ShowDialog("login_parse_error", "login_parse_error_desc", true, (ret) => {
                         });
                         throw;
                     }
@@ -61,7 +62,8 @@ namespace GGFramework.GGUser
                     }
                     catch (Exception e)
                     {
-                        UserSystem.Instance.UIAdaptor.ShowDialog("支付失败", "解析参数有异常:" + jsonString, true, (ret) => {
+                        Debug.LogError("[NativeSDK] PayFailed 解析异常: " + e);
+                        UserSystem.Instance.UIAdaptor.ShowDialog("pay_parse_error", "pay_parse_error_desc", true, (ret) => {
                         });
                         throw;
                     }
@@ -105,9 +107,10 @@ namespace GGFramework.GGUser
         public void Login()
         {
 #if SIMULATION_MODE_SDK
+            // 编辑器模拟：构造包含必要字段的登录回包，避免 HandleSDKCallback 中因缺少键而抛异常。
             JsonObject msg = new JsonObject();
-            //TODO: 内部帐号系统要要记录一个UID。
-            //msg["accountid"] = Player.UID;
+            msg["accountid"] = "sim_" + UnityEngine.Random.Range(100000, 999999);
+            msg["token"] = "sim_token";
             HandleSDKCallback("LoginSuccess", msg.ToString());
 #else
         NativeLuaBridge.Instance.UnityCallNative("Login", null);

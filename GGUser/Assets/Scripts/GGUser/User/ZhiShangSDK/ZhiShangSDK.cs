@@ -39,7 +39,8 @@ public class ZhiShangSDK: ISDK
                 }
                 catch (Exception e)
                 {
-                    UserSystem.Instance.UIAdaptor.ShowDialog("登录异常", "解析参数有异常:" + e.ToString() + "" + jsonString, true, (ret) => {
+                    Debug.LogError("[ZhiShangSDK] LoginSuccess 解析异常: " + e);
+                    UserSystem.Instance.UIAdaptor.ShowDialog("login_parse_error", "login_parse_error_desc", true, (ret) => {
                     });
                     throw;
                 }
@@ -57,7 +58,8 @@ public class ZhiShangSDK: ISDK
                     UserSystem.Instance.CallSDKPayFailed(jsonObject["customorgerid"].ToString());
                 }
                 catch (Exception e) {
-                    UserSystem.Instance.UIAdaptor.ShowDialog("支付失败", "解析参数有异常:" + jsonString, true, (ret) => {
+                    Debug.LogError("[ZhiShangSDK] PayFailed 解析异常: " + e);
+                    UserSystem.Instance.UIAdaptor.ShowDialog("pay_parse_error", "pay_parse_error_desc", true, (ret) => {
                     });
                     throw;
                 }

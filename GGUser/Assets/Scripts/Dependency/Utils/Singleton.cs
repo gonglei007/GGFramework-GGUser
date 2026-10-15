@@ -1,6 +1,15 @@
 ﻿using UnityEngine;
 
 /// <summary>
+/// 单例生命周期状态。放在非泛型静态类中，避免每个 Singleton&lt;T&gt; 的闭合泛型各自持有独立的
+/// applicationIsQuitting 字段，导致"部分单例已销毁但其它单例仍尝试重建幽灵对象"的问题（P2 修复）。
+/// </summary>
+public static class SingletonLifetime
+{
+    public static bool IsQuitting = false;
+}
+
+/// <summary>
 /// Be aware this will not prevent a non singleton constructor
 ///   such as `T myT = new T();`
 /// To prevent that, add `protected T () {}` to your singleton class.
@@ -17,7 +26,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 	{
 		get
 		{
-			if (applicationIsQuitting) {
+			if (SingletonLifetime.IsQuitting) {
 				Debug.LogWarning("[Singleton] Instance '"+ typeof(T) +
 				                 "' already destroyed on application quit." +
 				                 " Won't create again - returning null.");
@@ -59,8 +68,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 			}
 		}
 	}
-	
-	private static bool applicationIsQuitting = false;
+
 	/// <summary>
 	/// When Unity quits, it destroys objects in a random order.
 	/// In principle, a Singleton is only destroyed when application quits.
@@ -68,8 +76,9 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 	///   it will create a buggy ghost object that will stay on the Editor scene
 	///   even after stopping playing the Application. Really bad!
 	/// So, this was made to be sure we're not creating that buggy ghost object.
+	/// 说明：使用 SingletonLifetime.IsQuitting 而非泛型静态字段，确保所有 Singleton&lt;T&gt; 共享同一状态。
 	/// </summary>
 	public void OnDestroy () {
-		applicationIsQuitting = true;
+		SingletonLifetime.IsQuitting = true;
 	}
 }

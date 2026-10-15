@@ -46,7 +46,16 @@ namespace GGFramework.GGUser
         /// <summary>渠道登录凭证换平台 token。</summary>
         public void ExchangeToken(LoginResult login, Action<LoginResult> callback)
         {
-            if (login == null || !login.success)
+            if (login == null)
+            {
+                // P2 修复：login 为 null 时不直接回调 null，避免业务方 NRE。
+                if (callback != null)
+                {
+                    callback(new LoginResult { success = false, message = "空的登录结果" });
+                }
+                return;
+            }
+            if (!login.success)
             {
                 if (callback != null) callback(login);
                 return;
