@@ -6,3 +6,12 @@ GGUser/.vs
 .vsconfig
 extensions.json
 default-2021.dwlt
+
+# Unity 用户本地状态（不同机器不同 IDE 布局/搜索索引，不应入库）
+GGUser/UserSettings/Layouts/
+GGUser/UserSettings/Search.index
+GGUser/UserSettings/Search.settings
+GGUser/UserSettings/EditorUserSettings.asset
+
+# 备份/临时文件
+*.bak
