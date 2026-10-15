@@ -290,6 +290,51 @@ namespace GGFramework.GGUser.Tests
         // ---------------- 补单 / 恢复 ----------------
 
         [Test]
+        public void ProcessUnfinished_MultipleTransactions_FiresOnAllDoneOnce()
+        {
+            // P1 回归：新增的聚合回调重载应在全部未完成事务处理完毕后恰好触发一次。
+            PlatformConfig cfg = new PlatformConfig();
+            gg.Init(cfg);
+            FakePayChannel fake = new FakePayChannel("fake");
+            fake.unfinished.Add(new PurchaseResult { state = PurchaseState.Purchased, storeTransactionId = "tx_a", developerOrderId = "d_a" });
+            fake.unfinished.Add(new PurchaseResult { state = PurchaseState.Purchased, storeTransactionId = "tx_b", developerOrderId = "d_b" });
+            fake.unfinished.Add(new PurchaseResult { state = PurchaseState.Failed, storeTransactionId = "tx_c" });
+            gg.RegisterChannel("fake", () => fake);
+            gg.Gateway.onPost = (url, body, onResponse) => onResponse("{\"delivered\":true}");
+
+            int eachCount = 0;
+            int allDoneCount = 0;
+            gg.ProcessUnfinished("fake", o => eachCount++, () => allDoneCount++);
+
+            Assert.AreEqual(2, eachCount, "仅 Purchased 事务应逐笔回调 onEach");
+            Assert.AreEqual(1, allDoneCount, "onAllDone 应恰好触发一次");
+            CollectionAssert.Contains(fake.finishedTransactions, "tx_a");
+            CollectionAssert.Contains(fake.finishedTransactions, "tx_b");
+        }
+
+        [Test]
+        public void ProcessUnfinished_EmptyList_FiresOnAllDone()
+        {
+            PlatformConfig cfg = new PlatformConfig();
+            gg.Init(cfg);
+            FakePayChannel fake = new FakePayChannel("fake");
+            gg.RegisterChannel("fake", () => fake);
+
+            bool allDone = false;
+            gg.ProcessUnfinished("fake", null, () => allDone = true);
+            Assert.IsTrue(allDone);
+        }
+
+        [Test]
+        public void ProcessUnfinished_UnknownChannel_FiresOnAllDone()
+        {
+            gg.Init(null);
+            bool allDone = false;
+            gg.ProcessUnfinished("ghost", null, () => allDone = true);
+            Assert.IsTrue(allDone, "未知渠道也应触发 onAllDone，避免调用方永远挂起");
+        }
+
+        [Test]
         public void ProcessUnfinished_VerifiesAndFinishes()
         {
             PlatformConfig cfg = new PlatformConfig();

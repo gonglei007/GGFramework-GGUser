@@ -40,6 +40,32 @@ namespace GGFramework.GGUser.Tests
         }
 
         [UnityTest]
+        public IEnumerator RepeatedInit_DoesNotDoubleSubscribe()
+        {
+            // P2 回归：多次调用 UserManager.Init 不应叠加 UserSystem.onEvent 订阅，
+            // 否则一次 SDKLoginSuccess 事件会引发多次 fsm.ChangeState(States.Init)。
+            UserManager um = UserManager.Instance;
+            UserSystem us = UserSystem.Instance;
+
+            // 先清空历史订阅（前序测试可能遗留），确保本用例从净状态开始。
+            us.onEvent = null;
+
+            um.Init("um_channel_a");
+            int afterFirst = us.onEvent != null ? us.onEvent.GetInvocationList().Length : 0;
+            um.Init("um_channel_b");
+            um.Init("um_channel_c");
+            int afterThird = us.onEvent != null ? us.onEvent.GetInvocationList().Length : 0;
+
+            Assert.AreEqual(1, afterFirst, "首次 Init 应注册一个订阅");
+            Assert.AreEqual(1, afterThird, "重复 Init 不应叠加订阅（P2 修复前会为 3）");
+
+            // 验证事件仍能正常驱动状态机推进。
+            us.TriggerEvent(UserSystem.States.SDKLogining, UserSystem.Events.SDKLoginSuccess, "u_probe");
+            yield return null;
+            Assert.IsTrue(um.HasLogined(), "单次订阅仍应能将 UserManager 推进到已登录");
+        }
+
+        [UnityTest]
         public IEnumerator AdvancesToLogined_OnSDKLoginSuccessEvent()
         {
             UserManager um = UserManager.Instance;

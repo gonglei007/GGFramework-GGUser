@@ -70,6 +70,35 @@ namespace GGFramework.GGUser.Tests
         }
 
         [UnityTest]
+        public IEnumerator SDKPay_InEditor_BroadcastsExactlyOnce()
+        {
+            // P0 回归：之前 UserSystem.SDKPay 中 #if UNITY_EDITOR 分支会与 NativeSDK 的 SIMULATION_MODE_SDK
+            // 分支重复触发 CallSDKPaySuccess，造成一次支付广播两次事件。
+            UserSystem us = UserSystem.Instance;
+            int paySuccessCount = 0;
+            Action<UserSystem.States, UserSystem.Events, object> handler =
+                (state, e, param) => { if (e == UserSystem.Events.SDKPaySuccess) paySuccessCount++; };
+
+            us.onEvent += handler;
+            us.SDKPay(new Order());
+            yield return null;
+            us.onEvent -= handler;
+
+            Assert.AreEqual(1, paySuccessCount, "一次 SDKPay 应恰好广播一次 SDKPaySuccess");
+        }
+
+        [UnityTest]
+        public IEnumerator SDKLogin_InEditor_DoesNotThrow()
+        {
+            // P0 回归：NativeSDK.Login 模拟分支之前会因空 JsonObject 报 KeyNotFoundException。
+            UserSystem us = UserSystem.Instance;
+            us.Init("regression_channel");
+            Assert.DoesNotThrow(() => us.SDKLogin());
+            yield return null;
+            Assert.IsNotNull(us.UserInfo, "编辑器模拟登录应回填 UserInfo");
+        }
+
+        [UnityTest]
         public IEnumerator TriggerEvent_InvokesSubscriber()
         {
             UserSystem us = UserSystem.Instance;

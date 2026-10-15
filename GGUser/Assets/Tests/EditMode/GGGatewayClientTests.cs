@@ -101,6 +101,19 @@ namespace GGFramework.GGUser.Tests
         }
 
         [Test]
+        public void ExchangeToken_NullLogin_ReturnsFailureNotNull()
+        {
+            // P2 回归：login=null 时不得直接回调 null，避免业务方 NRE。
+            GGGatewayClient gw = new GGGatewayClient();
+            LoginResult result = null;
+            gw.ExchangeToken(null, r => result = r);
+
+            Assert.IsNotNull(result, "login=null 时应返回非空的失败 LoginResult");
+            Assert.IsFalse(result.success);
+            Assert.IsFalse(string.IsNullOrEmpty(result.message));
+        }
+
+        [Test]
         public void ExchangeToken_FailedLogin_ReturnsUnchangedWithoutCallingGateway()
         {
             GGGatewayClient gw = new GGGatewayClient();
