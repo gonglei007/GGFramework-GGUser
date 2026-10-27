@@ -434,20 +434,26 @@ namespace GGFramework.GGUser
         private static void SaveUID(string uid)
         {
             string file = PersistentDataPath + "/" + "uid.txt";
-            StreamWriter writer = new StreamWriter(file, false);
-            writer.Write(uid);
-            writer.Close();
+            using (StreamWriter writer = new StreamWriter(file, false))
+            {
+                writer.Write(uid);
+            }
         }
 
         private static string LoadUID()
         {
-            string uid = "000000";
+            string uid;
             string file = PersistentDataPath + "/" + "uid.txt";
             if (File.Exists(file))
             {
-                StreamReader reader = new StreamReader(file);
-                uid = reader.ReadLine();
-                reader.Close();
+                using (StreamReader reader = new StreamReader(file))
+                {
+                    uid = reader.ReadLine();
+                }
+                if (string.IsNullOrEmpty(uid))
+                {
+                    uid = "000000";
+                }
             }
             else
             {
