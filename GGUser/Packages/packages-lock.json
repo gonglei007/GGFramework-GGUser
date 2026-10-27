@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.gonglei.ggframework.core": {
+      "version": "https://github.com/gonglei007/GGFramework-Core.git#v0.1.0",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "0d4f009e718baed75bfaaf8c9eddf7da0be32ea4"
+    },
     "com.unity.2d.animation": {
       "version": "13.0.4",
       "depth": 1,

@@ -3,6 +3,7 @@
     "rootNamespace": "GGFramework.GGUser.Tests",
     "references": [
         "GGFramework.GGUser",
+        "GGFramework.Core.Runtime",
         "SimpleJson",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner"

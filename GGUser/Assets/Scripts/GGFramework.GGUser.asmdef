@@ -2,6 +2,7 @@
     "name": "GGFramework.GGUser",
     "rootNamespace": "GGFramework.GGUser",
     "references": [
+        "GGFramework.Core.Runtime",
         "SimpleJson",
         "MonsterLove.StateMachine",
         "UnityEngine.UI"
