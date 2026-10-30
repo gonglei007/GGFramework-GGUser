@@ -2,7 +2,7 @@
 
 > 目标：从把代码复制进工程开始，到完成「SDK 初始化 → 登录 → 支付 → 事件订阅」的最少可运行链路。
 >
-> 本文所有示例代码均来自框架真实源码 API，可在 **Unity 2021.3.4f1c1** 编辑器下直接运行（默认走模拟 SDK）。
+> 本文所有示例代码均来自框架真实源码 API，可在 **Unity 6000.3.13f1** 编辑器下直接运行（默认走模拟 SDK）。
 
 ---
 
@@ -22,19 +22,18 @@ GGUser/Assets/Scripts/GGUser/
 ├── User/          # UserManager.cs / ISDK.cs / SDKFactory.cs / User.cs / Order.cs /
 │                  # 各渠道实现（QuickSDK / ZhiShangSDK / NativeSDK / InternalSDK）
 ├── Platform/      # NativeLuaBridge.cs / PlatformInterfaces.cs / AndroidInterfaces.cs
-├── Adaptors/      # UIAdaptor.cs / LogAdaptor.cs
-└── Dependency/    # Utils/Singleton.cs / CoroutineUtil.cs（泛型单例与协程工具）
+└── Adaptors/      # UIAdaptor.cs / LogAdaptor.cs
 ```
 
-> 如果你的工程还没有 `Assets/Scripts/Dependency/Utils/Singleton.cs` 和 `CoroutineUtil.cs`，
-> 请一并复制（`Singleton<T>` 是所有单例的基类，`CoroutineUtil` 是状态机延时切状态所依赖的协程工具）。
+> `Singleton<T>`（所有单例的基类）与 `CoroutineUtil`（状态机延时切状态所依赖的协程工具）已收敛到 **GGFramework.Core** 单一源，工程内不再有本地副本；请在 `Packages/manifest.json` 添加：`"com.gonglei.ggframework.core": "https://github.com/gonglei007/GGFramework-Core.git#v0.1.1"`。
 
 ## 2. 引入依赖库（必需）
 
-框架的状态机和 JSON 序列化依赖以下两个库（位于本仓库 `Assets/LocalPackages`）：
+框架的状态机和 JSON 序列化依赖以下两个本地库（位于本仓库 `Assets/LocalPackages`）；此外还需 **GGFramework.Core**（经 UPM 引用，见下表）：
 
 | 依赖 | 用途 | 引用处 |
 | ---- | ---- | ---- |
+| **GGFramework.Core** | 基础类单一源（`Singleton` / `CoroutineUtil`），UPM git URL 引用 `#v0.1.1` | 所有单例 / 状态机延时 |
 | **MonsterLove/StateMachine** | 轻量状态机（`using MonsterLove.StateMachine;`） | `UserSystem.cs` / `UserManager.cs` |
 | **SimpleJson** | 轻量 JSON 序列化（`using SimpleJson;`） | `UserSystem.cs` / `Order.cs` / 各 SDK |
 
