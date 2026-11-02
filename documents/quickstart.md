@@ -25,16 +25,15 @@ GGUser/Assets/Scripts/GGUser/
 └── Adaptors/      # UIAdaptor.cs / LogAdaptor.cs
 ```
 
-> `Singleton<T>`（所有单例的基类）与 `CoroutineUtil`（状态机延时切状态所依赖的协程工具）已收敛到 **GGFramework.Core** 单一源，工程内不再有本地副本；请在 `Packages/manifest.json` 添加：`"com.gonglei.ggframework.core": "https://github.com/gonglei007/GGFramework-Core.git#v0.1.1"`。
+> `Singleton<T>`（所有单例的基类）、`CoroutineUtil`（状态机延时切状态所依赖的协程工具）与 `StateMachine<TState>`（登录 / 支付流程状态机）已收敛到 **GGFramework.Core** 单一源，工程内不再有本地副本；请在 `Packages/manifest.json` 添加：`"com.gonglei.ggframework.core": "https://github.com/gonglei007/GGFramework-Core.git#v0.2.0"`。
 
 ## 2. 引入依赖库（必需）
 
-框架的状态机和 JSON 序列化依赖以下两个本地库（位于本仓库 `Assets/LocalPackages`）；此外还需 **GGFramework.Core**（经 UPM 引用，见下表）：
+框架的 JSON 序列化依赖以下本地库（位于本仓库 `Assets/LocalPackages`）；状态机与基础类均已收敛到 **GGFramework.Core**（经 UPM 引用，见下表）：
 
 | 依赖 | 用途 | 引用处 |
 | ---- | ---- | ---- |
-| **GGFramework.Core** | 基础类单一源（`Singleton` / `CoroutineUtil`），UPM git URL 引用 `#v0.1.1` | 所有单例 / 状态机延时 |
-| **MonsterLove/StateMachine** | 轻量状态机（`using MonsterLove.StateMachine;`） | `UserSystem.cs` / `UserManager.cs` |
+| **GGFramework.Core** | 基础类单一源（`Singleton` / `CoroutineUtil` / `StateMachine<TState>`），UPM git URL 引用 `#v0.2.0` | 所有单例 / 状态机（`UserSystem.cs` / `UserManager.cs`）/ 状态机延时 |
 | **SimpleJson** | 轻量 JSON 序列化（`using SimpleJson;`） | `UserSystem.cs` / `Order.cs` / 各 SDK |
 
 两个库缺一不可，否则框架代码无法编译。别忘了它们的 `.cs` 需要能进入编译（放在 `Assets` 下即可）。
@@ -260,7 +259,7 @@ public class QuickStartDemo : MonoBehaviour
 
 | 现象 | 原因 / 解决 |
 | ---- | ---- |
-| 编译报 `MonsterLove` / `SimpleJson` 找不到 | 未引入依赖库，见上文第 2 节 |
+| 编译报 `SimpleJson` 找不到 | 未引入依赖库，见上文第 2 节 |
 | `SDKFactory.CreateSDK` 返回空导致流程不走 | 当前 `CreateSDK` 的渠道实现为注释占位，默认走 `UserSystem.Awake` 里创建的 `NativeSDK`（编辑器下可用）。真机渠道需按 `manual.md`「SDK 渠道接入」一节实现 |
 | 真机不弹渠道登录框 | 编辑器模拟宏 `SIMULATION_MODE_SDK` 在真机包默认未开启，`NativeSDK` 会走 `NativeLuaBridge.UnityCallNative("Login", ...)` 调到原生，需先对接原生回调 |
 | 想强制走模拟登录 | 在 `InternalSDK.SubmitData` / `NativeSDK` 等文件顶部打开 `SIMULATION_MODE_SDK`（见 `manual.md`） |

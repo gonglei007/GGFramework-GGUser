@@ -87,8 +87,7 @@ GGUser 是一个面向游戏客户端的**用户系统与 SDK 接入管理框架
 
 ## 依赖
 
-* **GGFramework.Core** — `Singleton` / `CoroutineUtil` 等基础类的单一源，经 UPM git URL 引用（`#v0.1.1`）；工程内原本地 `Singleton.cs` / `CoroutineUtil.cs` 副本已删除
-* **MonsterLove/StateMachine** — Unity 轻量状态机库（位于 `Assets/LocalPackages`）
+* **GGFramework.Core** — `Singleton` / `CoroutineUtil` / `StateMachine<TState>` 等基础类的单一源，经 UPM git URL 引用（`#v0.2.0`）；工程内原本地 `Singleton.cs` / `CoroutineUtil.cs` 副本及借用的 MonsterLove 状态机已删除
 * **SimpleJson** — 轻量 JSON 序列化库（位于 `Assets/LocalPackages`）
 * **Unity Test Framework** — `com.unity.test-framework`（单元测试，见下方「测试」）
 
@@ -103,14 +102,14 @@ GGUser 是一个面向游戏客户端的**用户系统与 SDK 接入管理框架
 
 **运行**：Unity 菜单 `Window → General → Test Runner`，在 **EditMode** / **PlayMode** 页签运行全部用例。
 
-> 为支持测试程序集引用，工程引入了 Assembly Definition：`SimpleJson`、`MonsterLove.StateMachine`、`GGFramework.GGUser`（`Assets/Scripts`，已引用 `GGFramework.Core.Runtime`），以及测试程序集 `GGFramework.GGUser.Tests.EditMode` / `.PlayMode`（`defineConstraints: UNITY_INCLUDE_TESTS`，不进入正式构建；同样引用 `GGFramework.Core.Runtime`）。`Demo` 仍在预定义的 `Assembly-CSharp`，自动引用上述程序集。
+> 为支持测试程序集引用，工程引入了 Assembly Definition：`SimpleJson`、`GGFramework.GGUser`（`Assets/Scripts`，已引用 `GGFramework.Core.Runtime`），以及测试程序集 `GGFramework.GGUser.Tests.EditMode` / `.PlayMode`（`defineConstraints: UNITY_INCLUDE_TESTS`，不进入正式构建；同样引用 `GGFramework.Core.Runtime`）。`Demo` 仍在预定义的 `Assembly-CSharp`，自动引用上述程序集。
 
 ## 设计模式
 
 * **策略模式** — `ISDK` 接口 + 多实现，按渠道切换
 * **简单工厂** — `SDKFactory.CreateSDK(target)`
 * **单例** — `UserManager` / `UserSystem` / `NativeLuaBridge`（`Singleton<T>` 由 `GGFramework.Core` 提供）
-* **状态机** — 内置 `StateMachine<States>` 驱动登录 / 支付流程
+* **状态机** — `GGFramework.Core` 提供的零第三方依赖 `StateMachine<States>` 驱动登录 / 支付流程
 * **适配器 / 依赖倒置** — `UIAdaptor` / `LogAdaptor` 委托注入
 * **桥接** — `NativeLuaBridge` 实现 Unity ↔ 原生双向通信
 

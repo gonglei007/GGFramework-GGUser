@@ -6,7 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 //using LuaInterface;
-using MonsterLove.StateMachine;
+using GGFramework.Core;
 using SimpleJson;
 
 namespace GGFramework.GGUser
@@ -160,8 +160,17 @@ namespace GGFramework.GGUser
 
         private void Awake()
         {
-            fsm = StateMachine<States>.Initialize(this, States.None);
-            fsm.Changed += (States state) =>
+            // 迁移到 Core 的零第三方依赖状态机：以 Configure 显式登记各状态的
+            // 进入/退出/更新回调，取代 MonsterLove 基于反射的 <State>_Enter/_Exit/_Update 约定绑定。
+            fsm = new StateMachine<States>();
+            fsm.Configure(States.None, onUpdate: None_Update);
+            fsm.Configure(States.SDKIniting, onEnter: SDKIniting_Enter, onExit: SDKIniting_Exit, onUpdate: SDKIniting_Update);
+            fsm.Configure(States.SDKInited, onEnter: SDKInited_Enter, onExit: SDKInited_Exit, onUpdate: SDKInited_Update);
+            fsm.Configure(States.SDKLogining, onEnter: SDKLogining_Enter, onExit: SDKLogining_Exit, onUpdate: SDKLogining_Update);
+            fsm.Configure(States.SDKLogined, onEnter: SDKLogined_Enter, onExit: SDKLogined_Exit, onUpdate: SDKLogined_Update);
+            // 先建立初始状态再订阅，与 MonsterLove Initialize(先)-Changed订阅(后) 的原时序一致（初始 None 不触发回调）。
+            fsm.ChangeState(States.None);
+            fsm.StateChanged += (States previous, States state) =>
             {
                 Debug.LogFormat("进入状态:{0}", state.ToString());
                 if (stateEvents.ContainsKey(state))
@@ -198,7 +207,7 @@ namespace GGFramework.GGUser
         public void Login()
         {
             readyLogin = true;
-            switch (fsm.State)
+            switch (fsm.Current)
             {
                 case States.None:
                     //CallSDKInitSuccess("Editor init success!");
@@ -218,7 +227,7 @@ namespace GGFramework.GGUser
 
         public bool HasLogined()
         {
-            return fsm.State == States.SDKLogined;
+            return fsm.Current == States.SDKLogined;
         }
 
         public void SDKInit()
@@ -309,7 +318,7 @@ namespace GGFramework.GGUser
             Debug.LogWarning("初始化失败:" + ret);
             // 直接广播失败事件（状态机切换到相同状态不会重新进入，原重试逻辑无效）。
             // 重试与否交由业务层（如 UserManager 弹窗）决定。
-            TriggerEvent(fsm.State, Events.SDKInitFailed, ret);
+            TriggerEvent(fsm.Current, Events.SDKInitFailed, ret);
         }
 
         static int failedCount = 2;
@@ -331,33 +340,33 @@ namespace GGFramework.GGUser
         {
             Debug.LogWarning("登录失败:" + ret);
             // 直接广播失败事件，避免登记在当前状态导致事件丢失。
-            TriggerEvent(fsm.State, Events.SDKLoginFailed, ret);
+            TriggerEvent(fsm.Current, Events.SDKLoginFailed, ret);
         }
 
         public void CallSDKLogoutSuccess(string ret)
         {
             Debug.LogWarning("登出成功:" + ret);
             // 先广播登出事件，再回到已初始化状态。
-            TriggerEvent(fsm.State, Events.SDKLogoutSuccess, ret);
+            TriggerEvent(fsm.Current, Events.SDKLogoutSuccess, ret);
             UserSystem.Instance.ChangeState(UserSystem.States.SDKInited);
         }
 
         public void CallSDKPaySuccess(string ret)
         {
             Debug.LogWarning("支付成功:" + ret);
-            TriggerEvent(fsm.State, Events.SDKPaySuccess, ret);
+            TriggerEvent(fsm.Current, Events.SDKPaySuccess, ret);
         }
 
         public void CallSDKPayFailed(string ret)
         {
             Debug.LogWarning("支付失败:" + ret);
-            TriggerEvent(fsm.State, Events.SDKPayFailed, ret);
+            TriggerEvent(fsm.Current, Events.SDKPayFailed, ret);
         }
 
         public void CallSDKPayCancel(string ret)
         {
             Debug.LogWarning("支付取消:" + ret);
-            TriggerEvent(fsm.State, Events.SDKPayCancel, ret);
+            TriggerEvent(fsm.Current, Events.SDKPayCancel, ret);
         }
 
         IEnumerator DelayChangeState(States iState, float iDelay)
@@ -369,14 +378,14 @@ namespace GGFramework.GGUser
         //------------------ 状态机处理 --------------------
         public void ChangeState(States state, float delay = 0.0f)
         {
-            Debug.LogFormat("切换用户状态:{0}=>{1}", fsm.State.ToString(), state.ToString());
+            Debug.LogFormat("切换用户状态:{0}=>{1}", fsm.Current.ToString(), state.ToString());
 
             CoroutineUtil.DoCoroutine(DelayChangeState(state, delay));
             //GameDebugger.sPushLog("切换用户状态:" + state.ToString());
             //fsm.ChangeState(state);
         }
 
-        private void None_Update()
+        private void None_Update(float deltaTime)
         {
             //ChangeState(States.SDKIniting);
         }
@@ -386,7 +395,7 @@ namespace GGFramework.GGUser
             SDKInit();
         }
 
-        private void SDKIniting_Update()
+        private void SDKIniting_Update(float deltaTime)
         {
         }
 
@@ -398,7 +407,7 @@ namespace GGFramework.GGUser
         {
         }
 
-        private void SDKInited_Update()
+        private void SDKInited_Update(float deltaTime)
         {
         }
 
@@ -411,7 +420,7 @@ namespace GGFramework.GGUser
             SDKLogin();
         }
 
-        private void SDKLogining_Update()
+        private void SDKLogining_Update(float deltaTime)
         {
         }
 
@@ -423,7 +432,7 @@ namespace GGFramework.GGUser
         {
         }
 
-        private void SDKLogined_Update()
+        private void SDKLogined_Update(float deltaTime)
         {
         }
 

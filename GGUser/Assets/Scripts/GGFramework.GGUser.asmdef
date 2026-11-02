@@ -4,7 +4,6 @@
     "references": [
         "GGFramework.Core.Runtime",
         "SimpleJson",
-        "MonsterLove.StateMachine",
         "UnityEngine.UI"
     ],
     "includePlatforms": [],

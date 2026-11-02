@@ -55,7 +55,7 @@
         <mxCell id="m6" value="6: CallSDKPaySuccess / Failed / Cancel" style="html=1;endArrow=block;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry"><mxPoint x="610" y="320" as="sourcePoint" /><mxPoint x="430" y="320" as="targetPoint" /></mxGeometry>
         </mxCell>
-        <mxCell id="n1" value="TriggerEvent(fsm.State, SDKPay*)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="n1" value="TriggerEvent(fsm.Current, SDKPay*)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
           <mxGeometry x="330" y="338" width="200" height="30" as="geometry" />
         </mxCell>
         <mxCell id="m7" value="7: onEvent(SDKPay*)" style="html=1;endArrow=open;dashed=1;" edge="1" parent="1">

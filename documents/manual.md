@@ -663,7 +663,7 @@ private void Awake()
 
 | 依赖 | 位置 | 用途 |
 | ---- | ---- | ---- |
-| **MonsterLove/StateMachine** | `Assets/LocalPackages` | 状态机（`using MonsterLove.StateMachine;`） |
+| **GGFramework.Core** | UPM git URL（`#v0.2.0`） | 状态机（`StateMachine<TState>`，`using GGFramework.Core;`） |
 | **SimpleJson** | `Assets/LocalPackages` | JSON 序列化（`using SimpleJson;`，`JsonObject`） |
 
 > 二者为编译硬依赖。接入时把对应 `.cs` 一并放入工程。

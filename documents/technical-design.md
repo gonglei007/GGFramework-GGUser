@@ -160,7 +160,7 @@ public interface ISDK
 关键约定：
 
 - 状态切换通过 `StateMachine<States>.ChangeState`，切换到**相同状态不会重新进入**（`if (currentState == nextState) return;`）。因此失败回调不再依赖「重进当前状态」，而是直接 `TriggerEvent` 广播失败事件，重试与否交由业务层决定。
-- 事件广播有两种路径：成功类事件通过 `SetEvent(state, e)` 登记、进入目标状态时由 `fsm.Changed` 广播；失败 / 登出类事件直接 `TriggerEvent(fsm.State, e, param)` 立即广播。
+- 事件广播有两种路径：成功类事件通过 `SetEvent(state, e)` 登记、进入目标状态时由 `fsm.StateChanged` 广播；失败 / 登出类事件直接 `TriggerEvent(fsm.Current, e, param)` 立即广播。
 
 ---
 

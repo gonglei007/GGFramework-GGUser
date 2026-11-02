@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MonsterLove.StateMachine;
+using GGFramework.Core;
 using SimpleJson;
 
 namespace GGFramework.GGUser
@@ -38,11 +38,18 @@ namespace GGFramework.GGUser
 
         private void Awake()
         {
-            fsm = StateMachine<States>.Initialize(this, States.None);
+            // 迁移到 Core 的零第三方依赖状态机：以 Configure 显式登记各状态的进入回调，
+            // 取代 MonsterLove 基于反射的 <State>_Enter 约定绑定。
+            fsm = new StateMachine<States>();
+            fsm.Configure(States.Init, onEnter: Init_Enter);
+            fsm.Configure(States.Authing, onEnter: Authing_Enter);
+            fsm.Configure(States.Logining, onEnter: Logining_Enter);
+            fsm.Configure(States.Logined, onEnter: Logined_Enter);
+            fsm.ChangeState(States.None);
         }
         public bool HasLogined()
         {
-            return fsm.State == States.Logined;
+            return fsm.Current == States.Logined;
         }
 
         public UserSystem.UserData GetUserData()
