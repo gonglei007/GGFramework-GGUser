@@ -9,6 +9,8 @@
   <p align="center">一个游戏客户端的用户 / 登录 / 支付 SDK 管理框架</p>
 </p>
 
+> **Demo 体验入口**：在同级 `GGFramework-Demo` 工程选择 **GGFramework → Demo → Play Showcase**，可通过显式模拟 SDK 体验登录失败重试、稳定 UID、登出及支付三种回调。接入自定义旧版 `ISDK` 时，可在登录前调用 `UserSystem.Instance.ConfigureSDK(implementation)` 替换工厂默认实现；登录开始后禁止替换。SDK 初始化成功事件现在在初始化完成时直接广播，登出同时清除 `UserInfo`。
+
 ## 简介
 
 GGUser 是一个面向游戏客户端的**用户系统与 SDK 接入管理框架**，用于统一对接各个渠道的账号登录、支付、数据上报等能力。它通过抽象 SDK 接口 + 工厂 + 事件回调，将具体渠道实现与游戏业务解耦，支持方便地切换和接入多个渠道 SDK。

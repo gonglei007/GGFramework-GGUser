@@ -106,7 +106,7 @@ namespace GGFramework.GGUser
         //public Action<string, string, bool, Action<bool>> onDialog = null;
         public Action<States, Events, object> onEvent;
         //public LuaFunction onEventX;
-        private static string PersistentDataPath = Application.persistentDataPath;
+        private static string PersistentDataPath { get { return Application.persistentDataPath; } }
 
         private StateMachine<States> fsm;
         private Dictionary<States, Event> stateEvents = new Dictionary<States, Event>();
@@ -156,6 +156,15 @@ namespace GGFramework.GGUser
             {
                 return this.channel;
             }
+        }
+
+        public void ConfigureSDK(ISDK implementation)
+        {
+            if (implementation == null) throw new ArgumentNullException(nameof(implementation));
+            if (fsm.Current != States.None) throw new InvalidOperationException("Configure SDK before login.");
+            if (ReferenceEquals(sdk, implementation)) return;
+            if (sdk is NativeSDK native) NativeLuaBridge.onNativeCallUnity -= native.HandleSDKCallback;
+            sdk = implementation;
         }
 
         private void Awake()
@@ -305,7 +314,7 @@ namespace GGFramework.GGUser
         public void CallSDKInitSuccess(string ret)
         {
             Debug.Log("初始化成功:" + ret);
-            SetEvent(States.SDKLogining, new Event(Events.SDKInitSuccess, ret));
+            TriggerEvent(fsm.Current, Events.SDKInitSuccess, ret);
             if (readyLogin)
             {
                 UserSystem.Instance.ChangeState(UserSystem.States.SDKLogining);
@@ -347,6 +356,7 @@ namespace GGFramework.GGUser
         {
             Debug.LogWarning("登出成功:" + ret);
             // 先广播登出事件，再回到已初始化状态。
+            user = null;
             TriggerEvent(fsm.Current, Events.SDKLogoutSuccess, ret);
             UserSystem.Instance.ChangeState(UserSystem.States.SDKInited);
         }
