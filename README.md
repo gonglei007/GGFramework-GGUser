@@ -1,15 +1,35 @@
-<p align="center">
-  <h1 align="center">GGUser (内测版)</h1>
-  <p align="center">
-    <a href="https://github.com/gonglei007/GGFramework-GGUser/watchers" target="_blank"><img src="https://img.shields.io/github/watchers/gonglei007/GGFramework-GGUser.svg" style="display: inherit;"/></a>
-    <a href="https://github.com/gonglei007/GGFramework-GGUser/stargazers" target="_blank"><img src="https://img.shields.io/github/stars/gonglei007/GGFramework-GGUser.svg" style="display: inherit;"/></a>
-    <a href="https://github.com/gonglei007/GGFramework-GGUser/network/members" target="_blank"><img src="https://img.shields.io/github/forks/gonglei007/GGFramework-GGUser.svg" style="display: inherit;"/></a>
-    <img src="https://img.shields.io/github/repo-size/gonglei007/GGFramework-GGUser.svg" style="display: inherit;"/>
-  </p>
-  <p align="center">一个游戏客户端的用户 / 登录 / 支付 SDK 管理框架</p>
-</p>
+# GGUser (内测版)
 
-> **Demo 体验入口**：在同级 `GGFramework-Demo` 工程选择 **GGFramework → Demo → Play Showcase**，可通过显式模拟 SDK 体验登录失败重试、稳定 UID、登出及支付三种回调。接入自定义旧版 `ISDK` 时，可在登录前调用 `UserSystem.Instance.ConfigureSDK(implementation)` 替换工厂默认实现；登录开始后禁止替换。SDK 初始化成功事件现在在初始化完成时直接广播，登出同时清除 `UserInfo`。
+Unity 用户、登录与支付 SDK 管理框架，提供渠道适配、原生平台桥接、事件回调和聚合平台接口，并可在编辑器中使用模拟渠道。
+
+[![Unity 6000.3.13f1](https://img.shields.io/badge/Unity-6000.3.13f1-222222?logo=unity)](https://github.com/gonglei007/GGFramework-GGUser/blob/main/GGUser/ProjectSettings/ProjectVersion.txt) [![Core dependency v0.2.0](https://img.shields.io/badge/Core_dependency-v0.2.0-2563eb)](https://github.com/gonglei007/GGFramework-Core/tree/v0.2.0) [![Branch main](https://img.shields.io/badge/Branch-main-64748b)](https://github.com/gonglei007/GGFramework-GGUser/tree/main)
+
+## 项目导航
+
+[Demo 体验](https://github.com/gonglei007/GGFramework-Demo) · [架构文档](https://github.com/gonglei007/GGFramework-Docs) · [Core](https://github.com/gonglei007/GGFramework-Core) · [GGResource](https://github.com/gonglei007/GGFramework-GGResource) · [GGNetwork](https://github.com/gonglei007/GGFramework-GGNetwork) · [GGUI](https://github.com/gonglei007/GGFramework-GGUI) · **GGUser**
+
+> **先体验整体框架**：[打开独立 Demo](https://github.com/gonglei007/GGFramework-Demo#快速开始)，体验资源、HTTP、UI、用户 SDK 与 Lua 的集成流程。[操作指南](https://github.com/gonglei007/GGFramework-Demo/blob/main/documents/showcase-guide.md) · [验收记录](https://github.com/gonglei007/GGFramework-Demo/blob/main/documents/showcase-verification.md)。
+
+## 模块关系
+
+本工程通过 UPM 固定使用 **Core v0.2.0**，状态机也来自 Core。界面与日志通过适配器注入，聚合平台网关由宿主提供传输实现，可组合 GGNetwork / GGUI 或自有实现。Demo 的用户系统源码副本与本模块独立维护。
+
+完整依赖图、工程锁定版本和源码副本边界由[架构文档中心](https://github.com/gonglei007/GGFramework-Docs#模块关系)统一维护。
+
+## 快速开始
+
+在准备存放代码的目录运行：
+
+```powershell
+git clone https://github.com/gonglei007/GGFramework-GGUser.git
+# 在 Unity Hub 中打开 GGFramework-GGUser/GGUser
+```
+
+1. 用 Unity **6000.3.13f1** 打开 `GGUser` 工程并等待依赖解析。
+2. 打开 [Assets/Demo/Demo.unity](GGUser/Assets/Demo/Demo.unity) 并播放。场景中的[演示脚本](GGUser/Assets/Demo/Scripts/Demo.cs)会创建 uGUI 面板，使用 `SimulationChannel` 与模拟网关。
+3. 依次体验初始化、登录、支付、补单和恢复购买；模拟网关只生成本地结果。真实渠道的凭据、商品映射与服务端校验按[聚合平台设计](documents/aggregation-platform-design.md)配置。
+4. 接入传统 SDK 流程见[快速接入指南](documents/quickstart.md)；登录前可用 `UserSystem.Instance.ConfigureSDK(implementation)` 注入自定义 `ISDK`。初始化完成直接广播事件，登出清除 `UserInfo`。
+5. 使用 `Window → General → Test Runner` 分别运行 EditMode / PlayMode 回归用例，目录与覆盖范围见[测试](#测试)。
 
 ## 简介
 
@@ -85,7 +105,7 @@ GGUser 是一个面向游戏客户端的**用户系统与 SDK 接入管理框架
 | `User/QuickSDK`、`ZhiShangSDK`、`NativeSDK`、`InternalSDK` | 各渠道 SDK 实现 |
 | `Platform/NativeLuaBridge`、`PlatformInterfaces`、`AndroidInterfaces` | 原生平台桥接 |
 | `Platform/GGPlatform` | 聚合平台门面（MVP）：渠道路由 / 支付全链路 / 登录换 token / 掉单补单 |
-| `Channels`、`Models`、`Config` | 聚合平台能力抽象（`ILoginChannel`/`IPayChannel`）、归一化模型、配置驱动（详见[聚合平台设计文档](/documents/aggregation-platform-design.md)） |
+| `Channels`、`Models`、`Config` | 聚合平台能力抽象（`ILoginChannel`/`IPayChannel`）、归一化模型、配置驱动（详见[聚合平台设计文档](documents/aggregation-platform-design.md)） |
 
 ## 依赖
 
@@ -117,22 +137,22 @@ GGUser 是一个面向游戏客户端的**用户系统与 SDK 接入管理框架
 
 ## 文档
 
-* [如何快速接入?](/documents/quickstart.md)
-* [技术手册](/documents/manual.md)
-* [技术设计文档](/documents/technical-design.md)（架构 / 登录 / 支付 / 状态机图）
-* [聚合平台设计文档](/documents/aggregation-platform-design.md)（自建聚合层：AppStore / GooglePlay / 自定义渠道统一接入）
+* [如何快速接入?](documents/quickstart.md)
+* [技术手册](documents/manual.md)
+* [技术设计文档](documents/technical-design.md)（架构 / 登录 / 支付 / 状态机图）
+* [聚合平台设计文档](documents/aggregation-platform-design.md)（自建聚合层：AppStore / GooglePlay / 自定义渠道统一接入）
 
 ### 架构图表（draw.io）
 
 | 图表 | 预览（SVG） | 可编辑源（drawio） |
 | ---- | ---- | ---- |
-| 架构分层 | [architecture.svg](/documents/diagrams/architecture.svg) | [architecture.drawio](/documents/diagrams/architecture.drawio) |
-| 登录时序 | [login-sequence.svg](/documents/diagrams/login-sequence.svg) | [login-sequence.drawio](/documents/diagrams/login-sequence.drawio) |
-| 支付时序 | [pay-sequence.svg](/documents/diagrams/pay-sequence.svg) | [pay-sequence.drawio](/documents/diagrams/pay-sequence.drawio) |
-| 状态机 | [state-machine.svg](/documents/diagrams/state-machine.svg) | [state-machine.drawio](/documents/diagrams/state-machine.drawio) |
-| 聚合平台架构 | [aggregation-architecture.svg](/documents/diagrams/aggregation-architecture.svg) | [aggregation-architecture.drawio](/documents/diagrams/aggregation-architecture.drawio) |
-| 聚合支付时序 | [aggregation-pay-sequence.svg](/documents/diagrams/aggregation-pay-sequence.svg) | [aggregation-pay-sequence.drawio](/documents/diagrams/aggregation-pay-sequence.drawio) |
-| 渠道路由 | [channel-routing.svg](/documents/diagrams/channel-routing.svg) | [channel-routing.drawio](/documents/diagrams/channel-routing.drawio) |
+| 架构分层 | [architecture.svg](documents/diagrams/architecture.svg) | [architecture.drawio](documents/diagrams/architecture.drawio) |
+| 登录时序 | [login-sequence.svg](documents/diagrams/login-sequence.svg) | [login-sequence.drawio](documents/diagrams/login-sequence.drawio) |
+| 支付时序 | [pay-sequence.svg](documents/diagrams/pay-sequence.svg) | [pay-sequence.drawio](documents/diagrams/pay-sequence.drawio) |
+| 状态机 | [state-machine.svg](documents/diagrams/state-machine.svg) | [state-machine.drawio](documents/diagrams/state-machine.drawio) |
+| 聚合平台架构 | [aggregation-architecture.svg](documents/diagrams/aggregation-architecture.svg) | [aggregation-architecture.drawio](documents/diagrams/aggregation-architecture.drawio) |
+| 聚合支付时序 | [aggregation-pay-sequence.svg](documents/diagrams/aggregation-pay-sequence.svg) | [aggregation-pay-sequence.drawio](documents/diagrams/aggregation-pay-sequence.drawio) |
+| 渠道路由 | [channel-routing.svg](documents/diagrams/channel-routing.svg) | [channel-routing.drawio](documents/diagrams/channel-routing.drawio) |
 
 ## 进群沟通
 
