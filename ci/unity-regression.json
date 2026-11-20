@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "unityVersion": "6000.3.13f1",
+  "repository": "gonglei007/GGFramework-GGUser",
+  "projectPath": "GGUser",
+  "stages": [
+    {
+      "name": "user-editmode",
+      "kind": "nunit",
+      "platform": "EditMode",
+      "minimum": 71,
+      "graphics": false
+    },
+    {
+      "name": "user-playmode",
+      "kind": "nunit",
+      "platform": "PlayMode",
+      "minimum": 11,
+      "graphics": true
+    }
+  ]
+}
